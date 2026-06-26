@@ -46,7 +46,7 @@ header {
 }
 
 /* =========================
-   LOGIN
+   LOGIN (FULL RESTORED)
 ========================= */
 #loginPage {
     position: fixed;
@@ -106,7 +106,6 @@ header {
     padding: 35px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(150,100,70,0.08);
-
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -120,18 +119,16 @@ header {
 }
 
 /* =========================
-   LOGOUT (NOW CENTER ABOVE FOOTER)
+   LOGOUT
 ========================= */
 #logoutBtn {
     display: block;
     margin: 20px auto 10px auto;
     padding: 8px 15px;
-
     border-radius: 30px;
     border: none;
     background: #5c4538;
     color: white;
-
     cursor: pointer;
     transition: 0.3s;
 }
@@ -153,7 +150,7 @@ input[type="date"] {
 }
 
 /* =========================
-   SLOTS (RESPONSIVE GRID FIX)
+   SLOTS
 ========================= */
 .slots {
     display: grid;
@@ -211,6 +208,25 @@ input[type="date"] {
 }
 
 /* =========================
+   DELETE BUTTON
+========================= */
+.delete-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px 15px;
+    border-radius: 30px;
+    border: none;
+    background: #5c4538;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.delete-btn:hover {
+    opacity: 0.8;
+}
+
+/* =========================
    FOOTER
 ========================= */
 .footer {
@@ -223,7 +239,7 @@ input[type="date"] {
 }
 
 /* =========================
-   POPUP (INDEX STYLE)
+   TOAST (ERROR ONLY)
 ========================= */
 #toast {
     position: fixed;
@@ -255,10 +271,41 @@ input[type="date"] {
 }
 
 /* =========================
+   SUCCESS CARD
+========================= */
+.success-card {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+
+    background: #ffffff;
+    color: #5c4538;
+
+    padding: 18px 25px;
+    border-radius: 20px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+
+    font-size: 15px;
+    font-weight: 500;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: 0.3s ease;
+    z-index: 9999;
+}
+
+.success-card.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* =========================
    RESPONSIVE
 ========================= */
 @media (max-width: 768px) {
-
     .admin-panel {
         width: 92%;
         padding: 20px;
@@ -270,7 +317,6 @@ input[type="date"] {
 }
 
 @media (max-width: 480px) {
-
     .logo h1 {
         font-size: 55px;
     }
