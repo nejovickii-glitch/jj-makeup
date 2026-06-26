@@ -306,10 +306,15 @@ header {
 
 @media (max-width: 480px) {
 
+    .slot {
+        font-size: 12px;
+        padding: 10px;
+    }
+
     .slot.active {
-        background: #c89f82;
-        color: white;
-        transform: scale(1.05);
-        box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+        background: #c89f82 !important;
+        color: white !important;
+        border: 2px solid #5c4538 !important;
+        box-shadow: 0 5px 12px rgba(0,0,0,0.18);
     }
 }
