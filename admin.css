@@ -92,7 +92,7 @@ header {
     border-bottom: 1px solid rgba(184,139,106,0.2);
 }
 
-/* LOGO CONTAINER */
+/* LOGO */
 .logo {
     display: flex;
     flex-direction: column;
@@ -100,7 +100,6 @@ header {
     justify-content: center;
 }
 
-/* JJ */
 .logo h1 {
     font-family: 'Great Vibes', cursive;
     font-size: 80px;
@@ -110,7 +109,6 @@ header {
     margin-bottom: 6px;
 }
 
-/* Beauty Studio */
 .logo p {
     font-family: 'Poppins', sans-serif;
     font-size: 13px;
@@ -146,13 +144,15 @@ header {
 }
 
 /* =========================
-   DATE INPUT
+   DATE INPUT (FIXED LOOK)
 ========================= */
 input[type="date"] {
     width: 100%;
-    padding: 12px;
+    height: 48px;
 
-    border-radius: 10px;
+    padding: 10px;
+
+    border-radius: 12px;
     border: 1px solid #ddd;
 
     font-size: 14px;
@@ -160,25 +160,27 @@ input[type="date"] {
 
     background: white;
     color: #5c4538;
+
+    outline: none;
+
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* ikonica kalendara */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.6;
 }
 
 /* =========================
-   MOBILE DATE FIX (ADDED)
+   MOBILE FIX (IMPORTANT)
 ========================= */
 @media (max-width: 768px) {
 
     input[type="date"] {
         height: 48px;
-        padding: 12px;
-
-        -webkit-appearance: none;
-        appearance: none;
-
-        border-radius: 10px;
-    }
-
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        opacity: 0.6;
+        font-size: 14px;
+        border-radius: 12px;
     }
 }
 
@@ -194,17 +196,12 @@ input[type="date"] {
 .slot {
     padding: 12px;
     border-radius: 50px;
-
     border: 1px solid #c89f82;
     background: white;
-
     cursor: pointer;
-
     font-size: 13px;
     text-align: center;
-
     color: #5c4538;
-
     transition: 0.2s ease;
 }
 
@@ -287,20 +284,8 @@ input[type="date"] {
 }
 
 /* =========================
-   RESPONSIVE (DESKTOP)
+   RESPONSIVE
 ========================= */
-@media (max-width: 768px) {
-
-    .admin-panel {
-        width: 92%;
-        padding: 18px;
-    }
-
-    .logo h1 {
-        font-size: 60px;
-    }
-}
-
 @media (max-width: 480px) {
 
     .logo h1 {
