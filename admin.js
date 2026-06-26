@@ -22,15 +22,16 @@ const ADMIN_PASS = "123456";
 const loginPage = document.getElementById("loginPage");
 const adminPage = document.getElementById("adminPage");
 
-const loginBtn = document.getElementById("loginBtn");
-const logoutBtn = document.getElementById("logoutBtn");
-
 const usernameInput = document.getElementById("username");
 const passwordInput = document.getElementById("password");
 
-const slots = document.querySelectorAll(".slot");
+const loginBtn = document.getElementById("loginBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+
+const adminDate = document.getElementById("adminDate");
 const saveBtn = document.getElementById("saveBtn");
-const dateInput = document.getElementById("adminDate");
+
+const slots = document.querySelectorAll(".slot");
 const bookingsList = document.getElementById("bookingsList");
 
 /* =========================
@@ -39,38 +40,49 @@ const bookingsList = document.getElementById("bookingsList");
 let selectedSlots = {};
 
 /* =========================
-   INIT VIEW (AUTO LOGIN)
+   POPUP (SUCCESS CARD)
 ========================= */
-function initAuthView() {
-  if (sessionStorage.getItem("logged") === "true") {
-    loginPage.style.display = "none";
-    adminPage.style.display = "block";
-  } else {
-    loginPage.style.display = "block";
-    adminPage.style.display = "none";
-  }
-}
+function showSuccess(message, isError = false) {
 
-initAuthView();
+    const card = document.getElementById("successCard");
+    if (!card) return;
+
+    card.textContent = message;
+    card.classList.add("show");
+
+    if (isError) {
+        card.style.background = "#8b3a3a";
+        card.style.color = "white";
+    } else {
+        card.style.background = "white";
+        card.style.color = "#5c4538";
+    }
+
+    setTimeout(() => {
+        card.classList.remove("show");
+    }, 2500);
+}
 
 /* =========================
    LOGIN
 ========================= */
 loginBtn.addEventListener("click", () => {
 
-  const user = usernameInput.value.trim();
-  const pass = passwordInput.value.trim();
+    const user = usernameInput.value;
+    const pass = passwordInput.value;
 
-  if (user === ADMIN_USER && pass === ADMIN_PASS) {
+    if (user === ADMIN_USER && pass === ADMIN_PASS) {
 
-    sessionStorage.setItem("logged", "true");
-    initAuthView();
+        sessionStorage.setItem("admin", "true");
 
-    showToast("✔ Uspešno ste se prijavili");
+        loginPage.style.display = "none";
+        adminPage.style.display = "block";
 
-  } else {
-    showToast("❌ Pogrešno korisničko ime ili lozinka", "error");
-  }
+        showSuccess("✔ Uspešno ste se ulogovali");
+
+    } else {
+        showSuccess("❌ Pogrešno korisničko ime ili lozinka", true);
+    }
 
 });
 
@@ -79,80 +91,65 @@ loginBtn.addEventListener("click", () => {
 ========================= */
 logoutBtn.addEventListener("click", () => {
 
-  sessionStorage.removeItem("logged");
-  initAuthView();
+    sessionStorage.removeItem("admin");
 
-  showToast("👋 Uspešno ste se odjavili");
+    loginPage.style.display = "block";
+    adminPage.style.display = "none";
+
+    showSuccess("👋 Uspešno ste se izlogovali");
+
 });
 
 /* =========================
-   SLOT TOGGLE
+   AUTO LOGIN
+========================= */
+if (sessionStorage.getItem("admin") === "true") {
+    loginPage.style.display = "none";
+    adminPage.style.display = "block";
+}
+
+/* =========================
+   SLOT SELEKCIJA
 ========================= */
 slots.forEach(slot => {
 
-  slot.addEventListener("click", () => {
+    slot.addEventListener("click", () => {
 
-    slot.classList.toggle("active");
+        const time = slot.textContent.trim();
 
-    const time = slot.textContent;
-    selectedSlots[time] = slot.classList.contains("active");
+        slot.classList.toggle("active");
 
-  });
+        selectedSlots[time] = slot.classList.contains("active");
 
-});
-
-/* =========================
-   LOAD SLOTOVI
-========================= */
-dateInput.addEventListener("change", async () => {
-
-  const date = dateInput.value;
-  if (!date) return;
-
-  try {
-
-    const docSnap = await db.collection("slots").doc(date).get();
-    const data = docSnap.exists ? docSnap.data() : {};
-
-    selectedSlots = { ...data };
-
-    slots.forEach(slot => {
-      const time = slot.textContent;
-      slot.classList.toggle("active", !!data[time]);
     });
 
-    loadBookings(date);
-
-  } catch (err) {
-    console.log(err);
-    showToast("Greška pri učitavanju slotova", "error");
-  }
 });
 
 /* =========================
-   SAVE SLOTOVI
+   SAVE TERMINA
 ========================= */
 saveBtn.addEventListener("click", async () => {
 
-  const date = dateInput.value;
+    const date = adminDate.value;
 
-  if (!date) {
-    showToast("❌ Izaberi datum!", "error");
-    return;
-  }
+    if (!date) {
+        showSuccess("❌ Izaberi datum", true);
+        return;
+    }
 
-  try {
+    try {
 
-    await db.collection("slots").doc(date).set(selectedSlots);
+        await db.collection("slots").doc(date).set(selectedSlots);
 
-    showToast("✔ Termini uspešno sačuvani");
+        showSuccess("✔ Termini uspešno sačuvani");
 
-    loadBookings(date);
+        loadBookings(date);
 
-  } catch (err) {
-    console.log(err);
-    showToast("❌ Greška pri čuvanju!", "error");
-  }
+    } catch (err) {
+        console.log(err);
+        showSuccess("❌ Greška pri čuvanju", true);
+    }
+
 });
 
 /* =========================
@@ -160,72 +157,51 @@ saveBtn.addEventListener("click", async () => {
 ========================= */
 async function loadBookings(date) {
 
-  bookingsList.innerHTML = "Učitavanje...";
+    bookingsList.innerHTML = "Učitavanje...";
 
-  try {
+    try {
 
-    const snap = await db.collection("bookings")
-      .where("datum", "==", date)
-      .get();
+        const snap = await db.collection("bookings")
+            .where("datum", "==", date)
+            .get();
 
-    if (snap.empty) {
-      bookingsList.innerHTML = "<p>Nema zakazanih termina</p>";
-      return;
+        if (snap.empty) {
+            bookingsList.innerHTML = "<p>Nema zakazanih termina</p>";
+            return;
+        }
+
+        let html = "";
+
+        snap.forEach(doc => {
+
+            const b = doc.data();
+
+            html += `
+                <div class="booking-card">
+                    <p><b>Ime:</b> ${b.ime}</p>
+                    <p><b>Email:</b> ${b.email}</p>
+                    <p><b>Telefon:</b> ${b.telefon}</p>
+                    <p><b>Usluga:</b> ${b.usluga}</p>
+                    <p><b>Datum:</b> ${b.datum}</p>
+                    <p><b>Vreme:</b> ${b.vreme}</p>
+                </div>
+            `;
+        });
+
+        bookingsList.innerHTML = html;
+
+    } catch (err) {
+        console.log(err);
+        bookingsList.innerHTML = "<p>Greška pri učitavanju</p>";
+        showSuccess("❌ Greška pri učitavanju", true);
     }
-
-    let html = "";
-
-    snap.forEach(doc => {
-
-      const b = doc.data();
-
-      html += `
-        <div class="booking-card">
-          <p><b>Ime:</b> ${b.ime}</p>
-          <p><b>Email:</b> ${b.email}</p>
-          <p><b>Telefon:</b> ${b.telefon}</p>
-          <p><b>Usluga:</b> ${b.usluga}</p>
-          <p><b>Datum:</b> ${b.datum}</p>
-          <p><b>Vreme:</b> ${b.vreme}</p>
-        </div>
-      `;
-    });
-
-    bookingsList.innerHTML = html;
-
-  } catch (err) {
-    console.log(err);
-    bookingsList.innerHTML = "<p>Greška pri učitavanju</p>";
-  }
 }
 
 /* =========================
-   TOAST (CLEAN VERSION)
-========================= */
-function showToast(message, type = "success") {
-
-  const toast = document.getElementById("toast");
-  if (!toast) return;
-
-  toast.textContent = message;
-  toast.classList.add("show");
-
-  if (type === "error") {
-    toast.style.background = "rgba(120,60,60,0.95)";
-  } else {
-    toast.style.background = "rgba(200,159,130,0.95)";
-  }
-
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3000);
-}
-
-/* =========================
-   SCROLL FIX
+   INIT
 ========================= */
 window.addEventListener("load", () => {
-  setTimeout(() => {
-    window.scrollTo(0, 0);
-  }, 10);
+    setTimeout(() => {
+        window.scrollTo(0, 0);
+    }, 10);
 });
