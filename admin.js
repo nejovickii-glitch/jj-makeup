@@ -105,7 +105,7 @@ if (sessionStorage.getItem("admin") === "true") {
 }
 
 /* =========================
-   SLOT SELEKCIJA (FIXED)
+   SLOT SELEKCIJA (🔥 FIXED MOBILE)
 ========================= */
 slots.forEach(slot => {
 
@@ -116,6 +116,12 @@ slots.forEach(slot => {
         const isActive = slot.classList.toggle("active");
 
         selectedSlots[time] = isActive;
+
+        /* 🔥 MOBILE FORCE UI UPDATE */
+        slot.style.transform = "scale(1.04)";
+        setTimeout(() => {
+            slot.style.transform = "";
+        }, 80);
     });
 
 });
@@ -241,7 +247,7 @@ async function loadBookings(date) {
 }
 
 /* =========================
-   INIT
+   INIT (RESTORE STATE)
 ========================= */
 window.addEventListener("load", async () => {
 
