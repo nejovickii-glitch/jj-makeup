@@ -53,10 +53,10 @@ loginBtn.addEventListener("click", () => {
     loginPage.style.display = "none";
     adminPage.style.display = "block";
 
-    showToast("✔ Uspešno ste se prijavili");
+    showSuccess("✔ Uspešno ste se prijavili");
 
   } else {
-    showToast("❌ Pogrešno korisničko ime ili lozinka", "error");
+    showError("❌ Pogrešno korisničko ime ili lozinka");
   }
 
 });
@@ -71,7 +71,7 @@ logoutBtn.addEventListener("click", () => {
   loginPage.style.display = "flex";
   adminPage.style.display = "none";
 
-  showToast("👋 Uspešno ste se odjavili");
+  showSuccess("👋 Uspešno ste se odjavili");
 });
 
 /* =========================
@@ -122,7 +122,7 @@ dateInput.addEventListener("change", async () => {
 
   } catch (err) {
     console.log(err);
-    showToast("Greška pri učitavanju slotova", "error");
+    showError("Greška pri učitavanju slotova");
   }
 });
 
@@ -134,7 +134,7 @@ saveBtn.addEventListener("click", async () => {
   const date = dateInput.value;
 
   if (!date) {
-    showToast("❌ Izaberi datum!", "error");
+    showError("❌ Izaberi datum!");
     return;
   }
 
@@ -142,13 +142,13 @@ saveBtn.addEventListener("click", async () => {
 
     await db.collection("slots").doc(date).set(selectedSlots);
 
-    showToast("✔ Termini su uspešno sačuvani!");
+    showSuccess("✔ Termini su uspešno sačuvani!");
 
     loadBookings(date);
 
   } catch (err) {
     console.log(err);
-    showToast("❌ Greška pri čuvanju!", "error");
+    showError("❌ Greška pri čuvanju!");
   }
 });
 
@@ -184,6 +184,10 @@ async function loadBookings(date) {
           <p><b>Usluga:</b> ${b.usluga}</p>
           <p><b>Datum:</b> ${b.datum}</p>
           <p><b>Vreme:</b> ${b.vreme}</p>
+
+          <button class="delete-btn" onclick="deleteBooking('${doc.id}')">
+            Obriši termin
+          </button>
         </div>
       `;
     });
@@ -197,21 +201,51 @@ async function loadBookings(date) {
 }
 
 /* =========================
-   TOAST SYSTEM
+   DELETE BOOKING (NOVO)
 ========================= */
-function showToast(message, type = "success") {
+async function deleteBooking(id) {
+
+  try {
+
+    await db.collection("bookings").doc(id).delete();
+
+    showSuccess("🗑 Termin uspešno obrisan");
+
+    const date = dateInput.value;
+    if (date) loadBookings(date);
+
+  } catch (err) {
+    console.log(err);
+    showError("❌ Greška pri brisanju");
+  }
+}
+
+/* =========================
+   SUCCESS UI
+========================= */
+function showSuccess(message) {
+
+  const el = document.getElementById("successCard");
+  if (!el) return;
+
+  el.textContent = message;
+  el.classList.add("show");
+
+  setTimeout(() => {
+    el.classList.remove("show");
+  }, 2500);
+}
+
+/* =========================
+   ERROR UI (TOAST)
+========================= */
+function showError(message) {
 
   const toast = document.getElementById("toast");
   if (!toast) return;
 
   toast.textContent = message;
   toast.classList.add("show");
-
-  if (type === "error") {
-    toast.classList.add("error");
-  } else {
-    toast.classList.remove("error");
-  }
 
   setTimeout(() => {
     toast.classList.remove("show");
