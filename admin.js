@@ -40,7 +40,7 @@ const bookingsList = document.getElementById("bookingsList");
 let selectedSlots = {};
 
 /* =========================
-   POPUP (SUCCESS CARD)
+   SUCCESS POPUP
 ========================= */
 function showSuccess(message, isError = false) {
 
@@ -52,9 +52,9 @@ function showSuccess(message, isError = false) {
 
     if (isError) {
         card.style.background = "#8b3a3a";
-        card.style.color = "white";
+        card.style.color = "#fff";
     } else {
-        card.style.background = "white";
+        card.style.background = "#fff";
         card.style.color = "#5c4538";
     }
 
@@ -68,8 +68,8 @@ function showSuccess(message, isError = false) {
 ========================= */
 loginBtn.addEventListener("click", () => {
 
-    const user = usernameInput.value;
-    const pass = passwordInput.value;
+    const user = usernameInput.value.trim();
+    const pass = passwordInput.value.trim();
 
     if (user === ADMIN_USER && pass === ADMIN_PASS) {
 
@@ -126,6 +126,17 @@ slots.forEach(slot => {
 });
 
 /* =========================
+   RESET SLOTOVA (bitno za datum change)
+========================= */
+function resetSlots() {
+    selectedSlots = {};
+
+    slots.forEach(slot => {
+        slot.classList.remove("active");
+    });
+}
+
+/* =========================
    SAVE TERMINA
 ========================= */
 saveBtn.addEventListener("click", async () => {
@@ -149,6 +160,20 @@ saveBtn.addEventListener("click", async () => {
         console.log(err);
         showSuccess("❌ Greška pri čuvanju", true);
     }
+
+});
+
+/* =========================
+   DATE CHANGE (FIX - BITNO)
+========================= */
+adminDate.addEventListener("change", () => {
+
+    const date = adminDate.value;
+
+    if (!date) return;
+
+    resetSlots();
+    loadBookings(date);
 
 });
 
