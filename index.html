@@ -1,92 +1,170 @@
-<!DOCTYPE html>
-<html lang="sr">
+const firebaseConfig = {
+  apiKey: "AIzaSyAado2iT2H6gEwUhoQvAJQHItGf-nFjH7o",
+  authDomain: "jj-makeup-web.firebaseapp.com",
+  projectId: "jj-makeup-web",
+  storageBucket: "jj-makeup-web.firebasestorage.app",
+  messagingSenderId: "64389217512",
+  appId: "1:64389217512:web:baecd738d273ee4732dd5d"
+};
 
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JJ Makeup</title>
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-<link rel="stylesheet" href="style.css">
+const dateInput = document.getElementById("date");
+const timeSelect = document.getElementById("time");
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+/* =========================
+   UČITAVANJE TERMINA
+========================= */
 
-<!-- EmailJS -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+dateInput.addEventListener("change", async () => {
 
-<script>
-  emailjs.init("clmuGyWyvynyGHrJy");
-</script>
+    const date = dateInput.value;
 
-</head>
+    if (!date) return;
 
-<body>
+    timeSelect.innerHTML = `<option>Učitavanje...</option>`;
 
-<header>
-    <div class="logo">
-        <h1>JJ</h1>
-    </div>
-</header>
+    try {
 
-<section class="hero">
-    <h2>Rezervišite svoj termin brzo i jednostavno</h2>
-    <p>Ulepšajte svoj izgled profesionalnom šminkom i lash lift tretmanom.</p>
-    <a href="#zakazivanje">Zakaži termin</a>
-</section>
+        const slotDoc = await db.collection("slots").doc(date).get();
+        const slots = slotDoc.exists ? slotDoc.data() : {};
 
-<section id="zakazivanje">
+        const bookingsSnap = await db.collection("bookings")
+            .where("datum", "==", date)
+            .get();
 
-    <h2>Zakažite termin</h2>
+        const taken = [];
 
-    <form id="bookingForm">
+        bookingsSnap.forEach(doc => {
+            taken.push(doc.data().vreme);
+        });
 
-        <label for="service">Usluga:</label>
-        <select id="service" required>
-            <option value="" selected disabled>Izaberite uslugu</option>
-            <option>Šminkanje</option>
-            <option>Lash lift</option>
-        </select>
+        const available = Object.keys(slots)
+            .filter(time => slots[time] === true && !taken.includes(time))
+            .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 
-        <label for="date">Datum:</label>
-        <input type="date" id="date" required>
+        timeSelect.innerHTML = `<option value="">Izaberi vreme</option>`;
 
-        <label for="time">Vreme:</label>
-        <select id="time" required>
-            <option value="">Izaberite datum</option>
-        </select>
+        if (available.length === 0) {
+            timeSelect.innerHTML = `<option>Nema slobodnih termina</option>`;
+            return;
+        }
 
-        <label for="name">Ime i prezime:</label>
-        <input type="text" id="name" placeholder="npr. Jovana Jović" required>
+        available.forEach(time => {
 
-        <label for="phone">Telefon:</label>
-        <input type="tel" id="phone" placeholder="npr. +381 64 123 456" required>
+            const opt = document.createElement("option");
+            opt.value = time;
+            opt.textContent = time;
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" placeholder="npr. ime@email.com" required>
+            timeSelect.appendChild(opt);
+        });
 
-        <button type="submit">Potvrdi termin</button>
+    } catch (err) {
+        console.log(err);
+        timeSelect.innerHTML = `<option>Greška</option>`;
+    }
+});
 
-    </form>
+/* =========================
+   BOOKING + EMAILJS
+========================= */
 
-</section>
+document.getElementById("bookingForm").addEventListener("submit", async (e) => {
 
-<!-- FOOTER -->
-<footer class="footer">
-    <p>© <span id="year"></span> JJ Makeup | Sva prava zadržana</p>
-</footer>
+    e.preventDefault();
 
-<script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-</script>
+    const date = dateInput.value;
+    const time = timeSelect.value;
 
-<script src="script.js"></script>
+    const service = document.getElementById("service").value;
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
+    const email = document.getElementById("email").value;
 
-<!-- TOAST -->
-<div id="toast"></div>
+    if (!date || !time) {
+        showToast("Izaberi datum i vreme", "error");
+        return;
+    }
 
-<!-- ✅ SUCCESS CARD (NOVO) -->
-<div id="successCard" class="success-card"></div>
+    try {
 
-</body>
-</html>
+        await db.collection("bookings").add({
+            datum: date,
+            vreme: time,
+            usluga: service,
+            ime: name,
+            telefon: phone,
+            email: email,
+            createdAt: Date.now()
+        });
+
+        emailjs.send("service_4way7mc", "template_h7n7pjj", {
+            ime: name,
+            email: email,
+            datum: date,
+            vreme: time,
+            usluga: service
+        });
+
+
+        // ✅ NOVO - SUCCESS CARD
+        showSuccessCard("✔ Uspešno ste zakazali termin!");
+
+        document.getElementById("bookingForm").reset();
+        timeSelect.innerHTML = `<option value="">Izaberite datum</option>`;
+
+    } catch (err) {
+        console.log(err);
+        showToast("Greška pri zakazivanju", "error");
+    }
+});
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message, type = "success") {
+
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    if (type === "error") {
+        toast.classList.remove("success");
+    }
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000);
+}
+
+/* =========================
+   SUCCESS CARD (NOVO)
+========================= */
+
+function showSuccessCard(message) {
+
+    const card = document.getElementById("successCard");
+
+    if (!card) return;
+
+    card.textContent = message;
+    card.classList.add("show");
+
+    setTimeout(() => {
+        card.classList.remove("show");
+    }, 3500);
+}
+
+/* =========================
+   SCROLL FIX
+========================= */
+
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        window.scrollTo(0, 0);
+    }, 10);
+});
