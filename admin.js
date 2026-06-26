@@ -50,13 +50,8 @@ function showSuccess(message, isError = false) {
     card.textContent = message;
     card.classList.add("show");
 
-    if (isError) {
-        card.style.background = "#8b3a3a";
-        card.style.color = "#fff";
-    } else {
-        card.style.background = "#fff";
-        card.style.color = "#5c4538";
-    }
+    card.style.background = isError ? "#8b3a3a" : "#fff";
+    card.style.color = isError ? "#fff" : "#5c4538";
 
     setTimeout(() => {
         card.classList.remove("show");
@@ -92,6 +87,7 @@ loginBtn.addEventListener("click", () => {
 logoutBtn.addEventListener("click", () => {
 
     sessionStorage.removeItem("admin");
+    localStorage.removeItem("lastSavedDate");
 
     loginPage.style.display = "block";
     adminPage.style.display = "none";
@@ -126,7 +122,7 @@ slots.forEach(slot => {
 });
 
 /* =========================
-   RESET SLOTOVA (bitno za datum change)
+   RESET SLOTOVA
 ========================= */
 function resetSlots() {
     selectedSlots = {};
@@ -154,27 +150,49 @@ saveBtn.addEventListener("click", async () => {
 
         showSuccess("✔ Termini uspešno sačuvani");
 
+        localStorage.setItem("lastSavedDate", date);
+
         loadBookings(date);
 
     } catch (err) {
         console.log(err);
         showSuccess("❌ Greška pri čuvanju", true);
     }
-
 });
 
 /* =========================
-   DATE CHANGE (FIX - BITNO)
+   DATE CHANGE
 ========================= */
-adminDate.addEventListener("change", () => {
+adminDate.addEventListener("change", async () => {
 
     const date = adminDate.value;
 
     if (!date) return;
 
-    resetSlots();
-    loadBookings(date);
+    localStorage.setItem("lastSavedDate", date);
 
+    resetSlots();
+
+    try {
+        const doc = await db.collection("slots").doc(date).get();
+
+        if (doc.exists) {
+            selectedSlots = doc.data() || {};
+        }
+
+        slots.forEach(slot => {
+            const time = slot.textContent.trim();
+
+            if (selectedSlots[time]) {
+                slot.classList.add("active");
+            }
+        });
+
+        loadBookings(date);
+
+    } catch (err) {
+        console.log(err);
+    }
 });
 
 /* =========================
@@ -223,10 +241,39 @@ async function loadBookings(date) {
 }
 
 /* =========================
-   INIT
+   INIT (RESTORE STATE ON REFRESH)
 ========================= */
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
+
     setTimeout(() => {
         window.scrollTo(0, 0);
     }, 10);
+
+    const savedDate = localStorage.getItem("lastSavedDate");
+
+    if (!savedDate) return;
+
+    adminDate.value = savedDate;
+
+    try {
+
+        const doc = await db.collection("slots").doc(savedDate).get();
+
+        if (doc.exists) {
+            selectedSlots = doc.data() || {};
+        }
+
+        slots.forEach(slot => {
+            const time = slot.textContent.trim();
+
+            if (selectedSlots[time]) {
+                slot.classList.add("active");
+            }
+        });
+
+        loadBookings(savedDate);
+
+    } catch (err) {
+        console.log(err);
+    }
 });
