@@ -136,6 +136,27 @@ header {
     gap: 15px;
 }
 
+.delete-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 50px;
+
+    background: #5c4538;
+    color: white;
+
+    border: none;
+    cursor: pointer;
+
+    font-size: 13px;
+    transition: 0.2s ease;
+}
+
+.delete-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+}
+
 /* =========================
    LOGOUT
 ========================= */
