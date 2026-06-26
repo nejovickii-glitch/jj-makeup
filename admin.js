@@ -39,6 +39,14 @@ const bookingsList = document.getElementById("bookingsList");
 let selectedSlots = {};
 
 /* =========================
+   AUTO LOGIN
+========================= */
+if (sessionStorage.getItem("logged") === "true") {
+  loginPage.style.display = "none";
+  adminPage.style.display = "block";
+}
+
+/* =========================
    LOGIN
 ========================= */
 loginBtn.addEventListener("click", () => {
@@ -53,10 +61,10 @@ loginBtn.addEventListener("click", () => {
     loginPage.style.display = "none";
     adminPage.style.display = "block";
 
-    showSuccess("✔ Uspešno ste se prijavili");
+    showToast("✔ Uspešno ste se prijavili");
 
   } else {
-    showError("❌ Pogrešno korisničko ime ili lozinka");
+    showToast("❌ Pogrešno korisničko ime ili lozinka", "error");
   }
 
 });
@@ -71,16 +79,8 @@ logoutBtn.addEventListener("click", () => {
   loginPage.style.display = "flex";
   adminPage.style.display = "none";
 
-  showSuccess("👋 Uspešno ste se odjavili");
+  showToast("👋 Uspešno ste se odjavili");
 });
-
-/* =========================
-   AUTO LOGIN
-========================= */
-if (sessionStorage.getItem("logged") === "true") {
-  loginPage.style.display = "none";
-  adminPage.style.display = "block";
-}
 
 /* =========================
    SLOT TOGGLE
@@ -122,7 +122,7 @@ dateInput.addEventListener("change", async () => {
 
   } catch (err) {
     console.log(err);
-    showError("Greška pri učitavanju slotova");
+    showToast("Greška pri učitavanju slotova", "error");
   }
 });
 
@@ -134,7 +134,7 @@ saveBtn.addEventListener("click", async () => {
   const date = dateInput.value;
 
   if (!date) {
-    showError("❌ Izaberi datum!");
+    showToast("❌ Izaberi datum!", "error");
     return;
   }
 
@@ -142,13 +142,13 @@ saveBtn.addEventListener("click", async () => {
 
     await db.collection("slots").doc(date).set(selectedSlots);
 
-    showSuccess("✔ Termini su uspešno sačuvani!");
+    showToast("✔ Termini su uspešno sačuvani!");
 
     loadBookings(date);
 
   } catch (err) {
     console.log(err);
-    showError("❌ Greška pri čuvanju!");
+    showToast("❌ Greška pri čuvanju!", "error");
   }
 });
 
@@ -184,10 +184,6 @@ async function loadBookings(date) {
           <p><b>Usluga:</b> ${b.usluga}</p>
           <p><b>Datum:</b> ${b.datum}</p>
           <p><b>Vreme:</b> ${b.vreme}</p>
-
-          <button class="delete-btn" onclick="deleteBooking('${doc.id}')">
-            Obriši termin
-          </button>
         </div>
       `;
     });
@@ -201,51 +197,21 @@ async function loadBookings(date) {
 }
 
 /* =========================
-   DELETE BOOKING (NOVO)
+   TOAST SYSTEM
 ========================= */
-async function deleteBooking(id) {
-
-  try {
-
-    await db.collection("bookings").doc(id).delete();
-
-    showSuccess("🗑 Termin uspešno obrisan");
-
-    const date = dateInput.value;
-    if (date) loadBookings(date);
-
-  } catch (err) {
-    console.log(err);
-    showError("❌ Greška pri brisanju");
-  }
-}
-
-/* =========================
-   SUCCESS UI
-========================= */
-function showSuccess(message) {
-
-  const el = document.getElementById("successCard");
-  if (!el) return;
-
-  el.textContent = message;
-  el.classList.add("show");
-
-  setTimeout(() => {
-    el.classList.remove("show");
-  }, 2500);
-}
-
-/* =========================
-   ERROR UI (TOAST)
-========================= */
-function showError(message) {
+function showToast(message, type = "success") {
 
   const toast = document.getElementById("toast");
   if (!toast) return;
 
   toast.textContent = message;
   toast.classList.add("show");
+
+  if (type === "error") {
+    toast.style.background = "rgba(120,60,60,0.95)";
+  } else {
+    toast.style.background = "rgba(200,159,130,0.95)";
+  }
 
   setTimeout(() => {
     toast.classList.remove("show");
