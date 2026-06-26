@@ -255,3 +255,35 @@ select:focus {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
 }
+/* =========================
+   SUCCESS CARD
+========================= */
+
+.success-card{
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+
+    background: #ffffff;
+    color: #5c4538;
+
+    padding: 18px 25px;
+    border-radius: 20px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+
+    font-size: 15px;
+    font-weight: 500;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: 0.3s ease;
+    z-index: 9999;
+}
+
+.success-card.show{
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
