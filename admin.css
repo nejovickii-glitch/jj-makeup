@@ -9,11 +9,6 @@
     box-sizing: border-box;
 }
 
-/* 🚀 FIX: sprečava horizontalni "zoom feel" */
-html, body {
-    overflow-x: hidden;
-}
-
 /* =========================
    BODY
 ========================= */
@@ -21,33 +16,6 @@ body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(180deg, #f8eee5, #fffaf6);
     color: #5c4538;
-}
-
-/* =========================
-   HEADER
-========================= */
-header {
-    text-align: center;
-    padding: 60px 20px 45px;
-    background: #fff8f1;
-    border-bottom: 1px solid rgba(184,139,106,0.2);
-}
-
-.logo h1 {
-    font-family: 'Great Vibes', cursive;
-    font-size: 90px;
-    color: #b88b6a;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
-}
-
-.logo::after {
-    content: "BEAUTY STUDIO";
-    display: block;
-    font-size: 11px;
-    letter-spacing: 7px;
-    margin-top: 22px;
-    color: #8f6b52;
 }
 
 /* =========================
@@ -71,7 +39,7 @@ header {
 }
 
 .login-box h1 {
-    font-family: 'Great+Vibes', cursive;
+    font-family: 'Great Vibes', cursive;
     font-size: 70px;
     color: #b88b6a;
     margin-bottom: 10px;
@@ -88,83 +56,110 @@ header {
     margin-bottom: 10px;
     border-radius: 10px;
     border: 1px solid #ddd;
+    font-size: 14px;
+}
 
-    /* 🚀 FIX iOS ZOOM */
-    font-size: 16px;
+/* =========================
+   BUTTONS
+========================= */
+button {
+    background: #c89f82;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 50px;
+    padding: 12px 20px;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
 }
 
 #loginBtn {
     width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 50px;
-    background: #c89f82;
-    color: white;
-    cursor: pointer;
+}
+
+/* =========================
+   HEADER
+========================= */
+header {
+    text-align: center;
+    padding: 60px 20px 40px;
+    background: #fff8f1;
+    border-bottom: 1px solid rgba(184,139,106,0.2);
+}
+
+/* LOGO CONTAINER */
+.logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* JJ */
+.logo h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 80px;
+    color: #b88b6a;
+    line-height: 1;
+    margin: 0;
+    margin-bottom: 6px; /* 👈 MALI LUKSUZNI RAZMAK */
+}
+
+/* Beauty Studio */
+.logo p {
+    font-family: 'Poppins', sans-serif; /* 👈 isti font kao index */
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: #8f6b52;
+    margin-top: 10px;
+    opacity: 0.9;
 }
 
 /* =========================
    ADMIN PANEL
 ========================= */
 .admin-panel {
-    max-width: 700px;
-    margin: 40px auto;
+    max-width: 720px;
+    margin: 30px auto;
     background: white;
-    padding: 35px;
+    padding: 25px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(150,100,70,0.08);
+
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
 /* =========================
-   TITLE
-========================= */
-.admin-panel h2 {
-    text-align: center;
-}
-
-/* =========================
    LOGOUT
 ========================= */
 #logoutBtn {
-    display: block;
-    margin: 20px auto 10px auto;
-    padding: 8px 15px;
-    border-radius: 30px;
-    border: none;
+    width: 120px;
+    margin: 0 auto;
     background: #5c4538;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-#logoutBtn:hover {
-    opacity: 0.8;
 }
 
 /* =========================
-   DATE INPUT
+   DATE
 ========================= */
 input[type="date"] {
     width: 100%;
     padding: 12px;
+
     border-radius: 10px;
     border: 1px solid #ddd;
 
-    /* 🚀 FIX iOS ZOOM */
-    font-size: 16px;
-
+    font-size: 14px;
     text-align: center;
-}
 
-/* =========================
-   SELECT + INPUT GLOBAL FIX
-========================= */
-input,
-select {
-    font-size: 16px; /* 🚀 critical fix */
+    background: white;
+    color: #5c4538;
 }
 
 /* =========================
@@ -172,24 +167,31 @@ select {
 ========================= */
 .slots {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 12px;
-    width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 10px;
 }
 
 .slot {
-    padding: 14px 10px;
+    padding: 12px;
     border-radius: 50px;
+
     border: 1px solid #c89f82;
     background: white;
+
     cursor: pointer;
-    font-size: 14px;
+
+    font-size: 13px;
     text-align: center;
-    transition: 0.2s;
+
+    color: #5c4538;
+
+    transition: 0.2s ease;
 }
 
 .slot:hover {
     transform: translateY(-2px);
+    background: #c89f82;
+    color: white;
 }
 
 .slot.active {
@@ -202,74 +204,41 @@ select {
 ========================= */
 #saveBtn {
     width: 100%;
-    padding: 15px;
-    border-radius: 50px;
-    border: none;
-    background: #c89f82;
-    color: white;
-    cursor: pointer;
+    padding: 14px;
 }
 
 /* =========================
    BOOKINGS
 ========================= */
 #bookingsList {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .booking-card {
     background: white;
-    padding: 15px;
-    margin-top: 10px;
-    border-radius: 15px;
     border: 1px solid rgba(184,139,106,0.2);
-}
-
-/* =========================
-   DELETE BUTTON
-========================= */
-.delete-btn {
-    width: 100%;
+    padding: 12px;
+    border-radius: 15px;
     margin-top: 10px;
-    padding: 10px 15px;
-    border-radius: 30px;
-    border: none;
-    background: #5c4538;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.delete-btn:hover {
-    opacity: 0.8;
+    font-size: 14px;
 }
 
 /* =========================
-   FOOTER
+   SUCCESS CARD
 ========================= */
-.footer {
-    text-align: center;
-    width: 100%;
-    padding: 20px;
-    margin-top: 10px;
-    font-size: 13px;
-    color: #8f6b52;
-}
-
-/* =========================
-   TOAST
-========================= */
-#toast {
+.success-card {
     position: fixed;
     left: 50%;
-    top: 20px;
-    transform: translateX(-50%) translateY(-20px);
+    bottom: 25px;
+    transform: translateX(-50%) translateY(20px);
 
-    background: rgba(200,159,130,0.95);
-    color: white;
+    background: white;
+    color: #5c4538;
 
-    padding: 14px 22px;
-    border-radius: 50px;
+    padding: 14px 20px;
+    border-radius: 20px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 
     font-size: 14px;
     font-weight: 500;
@@ -279,45 +248,22 @@ select {
 
     transition: 0.25s ease;
     z-index: 9999;
-
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
-
-#toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
-/* =========================
-   SUCCESS CARD
-========================= */
-.success-card {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%) translateY(20px);
-
-    background: #ffffff;
-    color: #5c4538;
-
-    padding: 18px 25px;
-    border-radius: 20px;
-
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-
-    font-size: 15px;
-    font-weight: 500;
-
-    opacity: 0;
-    pointer-events: none;
-
-    transition: 0.3s ease;
-    z-index: 9999;
 }
 
 .success-card.show {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+}
+
+/* =========================
+   FOOTER
+========================= */
+.footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    font-size: 13px;
+    color: #8f6b52;
 }
 
 /* =========================
@@ -327,51 +273,22 @@ select {
 
     .admin-panel {
         width: 92%;
-        margin: 20px auto;
         padding: 18px;
-        gap: 12px;
-        border-radius: 15px;
     }
 
     .logo h1 {
         font-size: 60px;
     }
-
-    .slots {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .slot {
-        font-size: 13px;
-        padding: 12px 8px;
-    }
-
-    #saveBtn,
-    #logoutBtn,
-    .delete-btn {
-        width: 100%;
-        padding: 14px;
-    }
 }
 
-/* =========================
-   SMALL PHONES
-========================= */
 @media (max-width: 480px) {
 
     .logo h1 {
         font-size: 50px;
     }
 
-    .slots {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
     .slot {
         font-size: 12px;
-    }
-
-    .booking-card {
-        font-size: 13px;
+        padding: 10px;
     }
 }
