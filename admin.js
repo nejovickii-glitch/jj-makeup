@@ -284,16 +284,3 @@ window.addEventListener("load", async () => {
     }
 });
 
-async function deleteBooking(id, date) {
-    try {
-        await db.collection("bookings").doc(id).delete();
-
-        showSuccess("✔ Termin obrisan");
-
-        loadBookings(date);
-
-    } catch (err) {
-        console.log(err);
-        showSuccess("❌ Greška pri brisanju", true);
-    }
-}
