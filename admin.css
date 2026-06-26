@@ -9,6 +9,11 @@
     box-sizing: border-box;
 }
 
+/* 🚀 FIX: sprečava horizontalni "zoom feel" */
+html, body {
+    overflow-x: hidden;
+}
+
 /* =========================
    BODY
 ========================= */
@@ -66,7 +71,7 @@ header {
 }
 
 .login-box h1 {
-    font-family: 'Great Vibes', cursive;
+    font-family: 'Great+Vibes', cursive;
     font-size: 70px;
     color: #b88b6a;
     margin-bottom: 10px;
@@ -83,7 +88,9 @@ header {
     margin-bottom: 10px;
     border-radius: 10px;
     border: 1px solid #ddd;
-    font-size: 14px;
+
+    /* 🚀 FIX iOS ZOOM */
+    font-size: 16px;
 }
 
 #loginBtn {
@@ -145,8 +152,19 @@ input[type="date"] {
     padding: 12px;
     border-radius: 10px;
     border: 1px solid #ddd;
-    font-size: 14px;
+
+    /* 🚀 FIX iOS ZOOM */
+    font-size: 16px;
+
     text-align: center;
+}
+
+/* =========================
+   SELECT + INPUT GLOBAL FIX
+========================= */
+input,
+select {
+    font-size: 16px; /* 🚀 critical fix */
 }
 
 /* =========================
@@ -303,7 +321,7 @@ input[type="date"] {
 }
 
 /* =========================
-   RESPONSIVE (MOBILE)
+   RESPONSIVE
 ========================= */
 @media (max-width: 768px) {
 
@@ -317,12 +335,6 @@ input[type="date"] {
 
     .logo h1 {
         font-size: 60px;
-    }
-
-    .login-box {
-        width: 90%;
-        margin: 80px auto;
-        padding: 25px;
     }
 
     .slots {
