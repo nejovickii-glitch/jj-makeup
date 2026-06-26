@@ -1,304 +1,341 @@
-const firebaseConfig = {
-  apiKey: "AIzaSyAado2iT2H6gEwUhoQvAJQHItGf-nFjH7o",
-  authDomain: "jj-makeup-web.firebaseapp.com",
-  projectId: "jj-makeup-web",
-  storageBucket: "jj-makeup-web.firebasestorage.app",
-  messagingSenderId: "64389217512",
-  appId: "1:64389217512:web:baecd738d273ee4732dd5d"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600&display=swap');
 
 /* =========================
-   LOGIN PODACI
+   RESET
 ========================= */
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "123456";
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 /* =========================
-   ELEMENTI
+   BODY
 ========================= */
-const loginPage = document.getElementById("loginPage");
-const adminPage = document.getElementById("adminPage");
-
-const usernameInput = document.getElementById("username");
-const passwordInput = document.getElementById("password");
-
-const loginBtn = document.getElementById("loginBtn");
-const logoutBtn = document.getElementById("logoutBtn");
-
-const adminDate = document.getElementById("adminDate");
-const saveBtn = document.getElementById("saveBtn");
-
-const slots = document.querySelectorAll(".slot");
-const bookingsList = document.getElementById("bookingsList");
-
-/* =========================
-   STATE
-========================= */
-let selectedSlots = {};
-
-/* =========================
-   SUCCESS POPUP
-========================= */
-function showSuccess(message, isError = false) {
-
-    const card = document.getElementById("successCard");
-    if (!card) return;
-
-    card.textContent = message;
-    card.classList.add("show");
-
-    card.style.background = isError ? "#8b3a3a" : "#fff";
-    card.style.color = isError ? "#fff" : "#5c4538";
-
-    setTimeout(() => {
-        card.classList.remove("show");
-    }, 2500);
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(180deg, #f8eee5, #fffaf6);
+    color: #5c4538;
 }
 
 /* =========================
    LOGIN
 ========================= */
-loginBtn.addEventListener("click", () => {
+#loginPage {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(180deg, #f8eee5, #fffaf6);
+    display: block;
+}
 
-    const user = usernameInput.value.trim();
-    const pass = passwordInput.value.trim();
+.login-box {
+    width: 320px;
+    margin: 120px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(150,100,70,0.15);
+    text-align: center;
+}
 
-    if (user === ADMIN_USER && pass === ADMIN_PASS) {
+.login-box h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 70px;
+    color: #b88b6a;
+    margin-bottom: 10px;
+}
 
-        sessionStorage.setItem("admin", "true");
+.login-box h2 {
+    margin-bottom: 20px;
+    font-size: 18px;
+}
 
-        loginPage.style.display = "none";
-        adminPage.style.display = "block";
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
 
-        showSuccess("✔ Uspešno ste se ulogovali");
+/* =========================
+   BUTTONS
+========================= */
+button {
+    background: #c89f82;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 50px;
+    padding: 12px 20px;
+    transition: 0.3s;
+    font-size: 14px;
+}
 
-    } else {
-        showSuccess("❌ Pogrešno korisničko ime ili lozinka", true);
-    }
+button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
 
-});
+#loginBtn {
+    width: 100%;
+}
+
+/* =========================
+   HEADER
+========================= */
+header {
+    text-align: center;
+    padding: 60px 20px 40px;
+    background: #fff8f1;
+    border-bottom: 1px solid rgba(184,139,106,0.2);
+}
+
+/* LOGO */
+.logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* JJ */
+.logo h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 80px;
+    color: #b88b6a;
+    line-height: 1;
+    margin: 0;
+    margin-bottom: 6px;
+}
+
+/* Beauty Studio */
+.logo p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: #8f6b52;
+    margin-top: 10px;
+    opacity: 0.9;
+}
+
+/* =========================
+   ADMIN PANEL
+========================= */
+.admin-panel {
+    max-width: 720px;
+    margin: 30px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(150,100,70,0.08);
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.delete-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 50px;
+
+    background: #5c4538;
+    color: white;
+
+    border: none;
+    cursor: pointer;
+
+    font-size: 13px;
+    transition: 0.2s ease;
+}
+
+.delete-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+}
 
 /* =========================
    LOGOUT
 ========================= */
-logoutBtn.addEventListener("click", () => {
-
-    sessionStorage.removeItem("admin");
-    localStorage.removeItem("lastSavedDate");
-
-    loginPage.style.display = "block";
-    adminPage.style.display = "none";
-
-    showSuccess("👋 Uspešno ste se izlogovali");
-
-});
-
-/* =========================
-   AUTO LOGIN
-========================= */
-if (sessionStorage.getItem("admin") === "true") {
-    loginPage.style.display = "none";
-    adminPage.style.display = "block";
+#logoutBtn {
+    width: 120px;
+    margin: 0 auto;
+    background: #5c4538;
 }
 
 /* =========================
-   SLOT SELEKCIJA (🔥 FIXED MOBILE)
+   DATE (CUSTOM APP STYLE)
 ========================= */
-slots.forEach(slot => {
+#adminDate {
+    width: 100%;
+    height: 48px;
 
-    slot.addEventListener("click", () => {
+    border-radius: 12px;
+    border: 1px solid #ddd;
 
-        const time = slot.textContent.trim();
+    background: white;
+    color: #5c4538;
 
-        const isActive = slot.classList.toggle("active");
+    font-size: 14px;
+    text-align: center;
 
-        selectedSlots[time] = isActive;
+    font-family: 'Poppins', sans-serif;
 
-        /* 🔥 MOBILE FORCE UI UPDATE */
-        slot.style.transform = "scale(1.04)";
-        setTimeout(() => {
-            slot.style.transform = "";
-        }, 80);
-    });
+    cursor: pointer;
 
-});
+    -webkit-appearance: none;
+    appearance: none;
+}
 
-/* =========================
-   RESET SLOTOVA
-========================= */
-function resetSlots() {
-    selectedSlots = {};
+/* calendar icon */
+#adminDate::-webkit-calendar-picker-indicator {
+    opacity: 0.4;
+    cursor: pointer;
+}
 
-    slots.forEach(slot => {
-        slot.classList.remove("active");
-    });
+/* hover */
+#adminDate:hover {
+    border-color: #c89f82;
+    box-shadow: 0 5px 15px rgba(200,159,130,0.15);
+}
+
+/* focus */
+#adminDate:focus {
+    outline: none;
+    border-color: #c89f82;
+    box-shadow: 0 0 0 3px rgba(200,159,130,0.15);
 }
 
 /* =========================
-   SAVE TERMINA
+   SLOTS
 ========================= */
-saveBtn.addEventListener("click", async () => {
+.slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 10px;
+}
 
-    const date = adminDate.value;
+.slot {
+    padding: 12px;
+    border-radius: 50px;
+    border: 1px solid #c89f82;
+    background: white;
+    cursor: pointer;
+    font-size: 13px;
+    text-align: center;
+    color: #5c4538;
+    transition: 0.2s ease;
+}
 
-    if (!date) {
-        showSuccess("❌ Izaberi datum", true);
-        return;
-    }
+.slot:hover {
+    transform: translateY(-2px);
+    background: #c89f82;
+    color: white;
+}
 
-    try {
-
-        await db.collection("slots").doc(date).set(selectedSlots);
-
-        showSuccess("✔ Termini uspešno sačuvani");
-
-        localStorage.setItem("lastSavedDate", date);
-
-        loadBookings(date);
-
-    } catch (err) {
-        console.log(err);
-        showSuccess("❌ Greška pri čuvanju", true);
-    }
-});
-
-/* =========================
-   DATE CHANGE
-========================= */
-adminDate.addEventListener("change", async () => {
-
-    const date = adminDate.value;
-
-    if (!date) return;
-
-    localStorage.setItem("lastSavedDate", date);
-
-    resetSlots();
-
-    try {
-
-        const doc = await db.collection("slots").doc(date).get();
-
-        if (doc.exists) {
-            selectedSlots = doc.data() || {};
-        }
-
-        slots.forEach(slot => {
-            const time = slot.textContent.trim();
-
-            if (selectedSlots[time]) {
-                slot.classList.add("active");
-            }
-        });
-
-        loadBookings(date);
-
-    } catch (err) {
-        console.log(err);
-    }
-});
-
-/* =========================
-   LOAD BOOKINGS
-========================= */
-async function loadBookings(date) {
-
-    bookingsList.innerHTML = "Učitavanje...";
-
-    try {
-
-        const snap = await db.collection("bookings")
-            .where("datum", "==", date)
-            .get();
-
-        if (snap.empty) {
-            bookingsList.innerHTML = "<p>Nema zakazanih termina</p>";
-            return;
-        }
-
-        let html = "";
-
-        snap.forEach(doc => {
-
-            const b = doc.data();
-
-            html += `
-                  
-                <div class="booking-card">
-                 <p><b>Ime:</b> ${b.ime}</p>
-                <p><b>Email:</b> ${b.email}</p>
-                 <p><b>Telefon:</b> ${b.telefon}</p>
-                <p><b>Usluga:</b> ${b.usluga}</p>
-                <p><b>Datum:</b> ${b.datum}</p>
-                <p><b>Vreme:</b> ${b.vreme}</p>
-
-            <button class="delete-btn" onclick="deleteBooking('${doc.id}', '${b.datum}')">
-            Obriši termin
-        </button>
-    </div>
-`;
-        });
-
-        bookingsList.innerHTML = html;
-
-    } catch (err) {
-        console.log(err);
-        bookingsList.innerHTML = "<p>Greška pri učitavanju</p>";
-        showSuccess("❌ Greška pri učitavanju", true);
-    }
+.slot.active {
+    background: #c89f82;
+    color: white;
+    transform: scale(1.03);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
 }
 
 /* =========================
-   INIT (RESTORE STATE)
+   SAVE BUTTON
 ========================= */
-window.addEventListener("load", async () => {
+#saveBtn {
+    width: 100%;
+    padding: 14px;
+}
 
-    setTimeout(() => {
-        window.scrollTo(0, 0);
-    }, 10);
+/* =========================
+   BOOKINGS
+========================= */
+#bookingsList {
+    margin-top: 10px;
+}
 
-    const savedDate = localStorage.getItem("lastSavedDate");
+.booking-card {
+    background: white;
+    border: 1px solid rgba(184,139,106,0.2);
+    padding: 12px;
+    border-radius: 15px;
+    margin-top: 10px;
+    font-size: 14px;
+}
 
-    if (!savedDate) return;
+/* =========================
+   SUCCESS CARD
+========================= */
+.success-card {
+    position: fixed;
+    left: 50%;
+    bottom: 25px;
+    transform: translateX(-50%) translateY(20px);
 
-    adminDate.value = savedDate;
+    background: white;
+    color: #5c4538;
 
-    try {
+    padding: 14px 20px;
+    border-radius: 20px;
 
-        const doc = await db.collection("slots").doc(savedDate).get();
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 
-        if (doc.exists) {
-            selectedSlots = doc.data() || {};
-        }
+    font-size: 14px;
+    font-weight: 500;
 
-        slots.forEach(slot => {
-            const time = slot.textContent.trim();
+    opacity: 0;
+    pointer-events: none;
 
-            if (selectedSlots[time]) {
-                slot.classList.add("active");
-            }
-        });
+    transition: 0.25s ease;
+    z-index: 9999;
+}
 
-        loadBookings(savedDate);
+.success-card.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
 
-    } catch (err) {
-        console.log(err);
+/* =========================
+   FOOTER
+========================= */
+.footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    font-size: 13px;
+    color: #8f6b52;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+
+    .admin-panel {
+        width: 92%;
+        padding: 18px;
     }
-});
 
-async function deleteBooking(id, date) {
-    try {
-        await db.collection("bookings").doc(id).delete();
+    .logo h1 {
+        font-size: 60px;
+    }
+}
 
-        showSuccess("✔ Termin obrisan");
+@media (max-width: 480px) {
 
-        loadBookings(date);
+    .slot {
+        font-size: 12px;
+        padding: 10px;
+    }
 
-    } catch (err) {
-        console.log(err);
-        showSuccess("❌ Greška pri brisanju", true);
+    .slot.active {
+        background: #c89f82 !important;
+        color: white !important;
+        border: 2px solid #5c4538 !important;
+        box-shadow: 0 5px 12px rgba(0,0,0,0.18);
     }
 }
