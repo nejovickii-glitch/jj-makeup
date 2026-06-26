@@ -107,7 +107,9 @@ document.getElementById("bookingForm").addEventListener("submit", async (e) => {
             usluga: service
         });
 
-        showToast("✔ Termin je uspešno zakazan!");
+
+        // ✅ NOVO - SUCCESS CARD
+        showSuccessCard("✔ Uspešno ste zakazali termin!");
 
         document.getElementById("bookingForm").reset();
         timeSelect.innerHTML = `<option value="">Izaberite datum</option>`;
@@ -131,9 +133,7 @@ function showToast(message, type = "success") {
     toast.classList.add("show");
 
     if (type === "error") {
-        toast.classList.add("error");
-    } else {
-        toast.classList.remove("error");
+        toast.classList.remove("success");
     }
 
     setTimeout(() => {
@@ -142,7 +142,25 @@ function showToast(message, type = "success") {
 }
 
 /* =========================
-   SCROLL FIX (REFRESH -> TOP)
+   SUCCESS CARD (NOVO)
+========================= */
+
+function showSuccessCard(message) {
+
+    const card = document.getElementById("successCard");
+
+    if (!card) return;
+
+    card.textContent = message;
+    card.classList.add("show");
+
+    setTimeout(() => {
+        card.classList.remove("show");
+    }, 3500);
+}
+
+/* =========================
+   SCROLL FIX
 ========================= */
 
 window.addEventListener("load", () => {
@@ -150,13 +168,3 @@ window.addEventListener("load", () => {
         window.scrollTo(0, 0);
     }, 10);
 });
-function showToast(message) {
-    const toast = document.getElementById("toast");
-
-    toast.textContent = message;
-    toast.classList.add("show");
-
-    setTimeout(() => {
-        toast.classList.remove("show");
-    }, 2500);
-}
