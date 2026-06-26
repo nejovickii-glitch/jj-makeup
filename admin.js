@@ -226,15 +226,20 @@ async function loadBookings(date) {
             const b = doc.data();
 
             html += `
+                  
                 <div class="booking-card">
-                    <p><b>Ime:</b> ${b.ime}</p>
-                    <p><b>Email:</b> ${b.email}</p>
-                    <p><b>Telefon:</b> ${b.telefon}</p>
-                    <p><b>Usluga:</b> ${b.usluga}</p>
-                    <p><b>Datum:</b> ${b.datum}</p>
-                    <p><b>Vreme:</b> ${b.vreme}</p>
-                </div>
-            `;
+                 <p><b>Ime:</b> ${b.ime}</p>
+                <p><b>Email:</b> ${b.email}</p>
+                 <p><b>Telefon:</b> ${b.telefon}</p>
+                <p><b>Usluga:</b> ${b.usluga}</p>
+                <p><b>Datum:</b> ${b.datum}</p>
+                <p><b>Vreme:</b> ${b.vreme}</p>
+
+            <button class="delete-btn" onclick="deleteBooking('${doc.id}', '${b.datum}')">
+            Obriši termin
+        </button>
+    </div>
+`;
         });
 
         bookingsList.innerHTML = html;
@@ -283,3 +288,17 @@ window.addEventListener("load", async () => {
         console.log(err);
     }
 });
+
+async function deleteBooking(id, date) {
+    try {
+        await db.collection("bookings").doc(id).delete();
+
+        showSuccess("✔ Termin obrisan");
+
+        loadBookings(date);
+
+    } catch (err) {
+        console.log(err);
+        showSuccess("❌ Greška pri brisanju", true);
+    }
+}
