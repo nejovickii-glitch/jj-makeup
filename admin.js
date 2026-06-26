@@ -39,27 +39,32 @@ const bookingsList = document.getElementById("bookingsList");
 let selectedSlots = {};
 
 /* =========================
-   AUTO LOGIN
+   INIT VIEW (AUTO LOGIN)
 ========================= */
-if (sessionStorage.getItem("logged") === "true") {
-  loginPage.style.display = "none";
-  adminPage.style.display = "block";
+function initAuthView() {
+  if (sessionStorage.getItem("logged") === "true") {
+    loginPage.style.display = "none";
+    adminPage.style.display = "block";
+  } else {
+    loginPage.style.display = "block";
+    adminPage.style.display = "none";
+  }
 }
+
+initAuthView();
 
 /* =========================
    LOGIN
 ========================= */
 loginBtn.addEventListener("click", () => {
 
-  const user = usernameInput.value;
-  const pass = passwordInput.value;
+  const user = usernameInput.value.trim();
+  const pass = passwordInput.value.trim();
 
   if (user === ADMIN_USER && pass === ADMIN_PASS) {
 
     sessionStorage.setItem("logged", "true");
-
-    loginPage.style.display = "none";
-    adminPage.style.display = "block";
+    initAuthView();
 
     showToast("✔ Uspešno ste se prijavili");
 
@@ -75,9 +80,7 @@ loginBtn.addEventListener("click", () => {
 logoutBtn.addEventListener("click", () => {
 
   sessionStorage.removeItem("logged");
-
-  loginPage.style.display = "flex";
-  adminPage.style.display = "none";
+  initAuthView();
 
   showToast("👋 Uspešno ste se odjavili");
 });
@@ -142,7 +145,7 @@ saveBtn.addEventListener("click", async () => {
 
     await db.collection("slots").doc(date).set(selectedSlots);
 
-    showToast("✔ Termini su uspešno sačuvani!");
+    showToast("✔ Termini uspešno sačuvani");
 
     loadBookings(date);
 
@@ -197,7 +200,7 @@ async function loadBookings(date) {
 }
 
 /* =========================
-   TOAST SYSTEM
+   TOAST (CLEAN VERSION)
 ========================= */
 function showToast(message, type = "success") {
 
