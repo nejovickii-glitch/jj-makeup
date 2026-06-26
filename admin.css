@@ -1,0 +1,277 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600&display=swap');
+
+/* =========================
+   RESET
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* =========================
+   BODY
+========================= */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(180deg, #f8eee5, #fffaf6);
+    color: #5c4538;
+}
+
+/* =========================
+   HEADER
+========================= */
+header {
+    text-align: center;
+    padding: 60px 20px 45px;
+    background: #fff8f1;
+    border-bottom: 1px solid rgba(184,139,106,0.2);
+}
+
+.logo h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 90px;
+    color: #b88b6a;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.logo::after {
+    content: "BEAUTY STUDIO";
+    display: block;
+    font-size: 11px;
+    letter-spacing: 7px;
+    margin-top: 22px;
+    color: #8f6b52;
+}
+
+/* =========================
+   LOGIN
+========================= */
+#loginPage {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(180deg, #f8eee5, #fffaf6);
+    display: block;
+}
+
+.login-box {
+    width: 320px;
+    margin: 120px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(150,100,70,0.15);
+    text-align: center;
+}
+
+.login-box h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 70px;
+    color: #b88b6a;
+    margin-bottom: 10px;
+}
+
+.login-box h2 {
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+#loginBtn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 50px;
+    background: #c89f82;
+    color: white;
+    cursor: pointer;
+}
+
+/* =========================
+   ADMIN PANEL
+========================= */
+.admin-panel {
+    max-width: 700px;
+    margin: 40px auto;
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(150,100,70,0.08);
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* =========================
+   TITLE
+========================= */
+.admin-panel h2 {
+    text-align: center;
+}
+
+/* =========================
+   LOGOUT (NOW CENTER ABOVE FOOTER)
+========================= */
+#logoutBtn {
+    display: block;
+    margin: 20px auto 10px auto;
+    padding: 8px 15px;
+
+    border-radius: 30px;
+    border: none;
+    background: #5c4538;
+    color: white;
+
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#logoutBtn:hover {
+    opacity: 0.8;
+}
+
+/* =========================
+   DATE INPUT
+========================= */
+input[type="date"] {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* =========================
+   SLOTS (RESPONSIVE GRID FIX)
+========================= */
+.slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 12px;
+    width: 100%;
+}
+
+.slot {
+    padding: 14px 10px;
+    border-radius: 50px;
+    border: 1px solid #c89f82;
+    background: white;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+    transition: 0.2s;
+}
+
+.slot:hover {
+    transform: translateY(-2px);
+}
+
+.slot.active {
+    background: #c89f82;
+    color: white;
+}
+
+/* =========================
+   SAVE BUTTON
+========================= */
+#saveBtn {
+    width: 100%;
+    padding: 15px;
+    border-radius: 50px;
+    border: none;
+    background: #c89f82;
+    color: white;
+    cursor: pointer;
+}
+
+/* =========================
+   BOOKINGS
+========================= */
+#bookingsList {
+    margin-top: 20px;
+}
+
+.booking-card {
+    background: white;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 15px;
+    border: 1px solid rgba(184,139,106,0.2);
+}
+
+/* =========================
+   FOOTER
+========================= */
+.footer {
+    text-align: center;
+    width: 100%;
+    padding: 20px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #8f6b52;
+}
+
+/* =========================
+   POPUP (INDEX STYLE)
+========================= */
+#toast {
+    position: fixed;
+    left: 50%;
+    top: 20px;
+    transform: translateX(-50%) translateY(-20px);
+
+    background: rgba(200,159,130,0.95);
+    color: white;
+
+    padding: 14px 22px;
+    border-radius: 50px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: 0.25s ease;
+    z-index: 9999;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+#toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+
+    .admin-panel {
+        width: 92%;
+        padding: 20px;
+    }
+
+    .logo h1 {
+        font-size: 70px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .logo h1 {
+        font-size: 55px;
+    }
+}
