@@ -307,12 +307,15 @@ header {
 
 @media (max-width: 480px) {
 
-    .logo h1 {
-        font-size: 50px;
-    }
-
     .slot {
         font-size: 12px;
         padding: 10px;
+    }
+
+    .slot.active {
+        background: #c89f82 !important;
+        color: white !important;
+        border: 2px solid #5c4538 !important;
+        box-shadow: 0 5px 12px rgba(0,0,0,0.18);
     }
 }
