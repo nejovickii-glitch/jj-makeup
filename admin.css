@@ -46,7 +46,7 @@ header {
 }
 
 /* =========================
-   LOGIN (FULL RESTORED)
+   LOGIN
 ========================= */
 #loginPage {
     position: fixed;
@@ -239,7 +239,7 @@ input[type="date"] {
 }
 
 /* =========================
-   TOAST (ERROR ONLY)
+   TOAST
 ========================= */
 #toast {
     position: fixed;
@@ -303,21 +303,63 @@ input[type="date"] {
 }
 
 /* =========================
-   RESPONSIVE
+   RESPONSIVE (MOBILE)
 ========================= */
 @media (max-width: 768px) {
+
     .admin-panel {
         width: 92%;
-        padding: 20px;
+        margin: 20px auto;
+        padding: 18px;
+        gap: 12px;
+        border-radius: 15px;
     }
 
     .logo h1 {
-        font-size: 70px;
+        font-size: 60px;
+    }
+
+    .login-box {
+        width: 90%;
+        margin: 80px auto;
+        padding: 25px;
+    }
+
+    .slots {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .slot {
+        font-size: 13px;
+        padding: 12px 8px;
+    }
+
+    #saveBtn,
+    #logoutBtn,
+    .delete-btn {
+        width: 100%;
+        padding: 14px;
     }
 }
 
+/* =========================
+   SMALL PHONES
+========================= */
 @media (max-width: 480px) {
+
     .logo h1 {
-        font-size: 55px;
+        font-size: 50px;
+    }
+
+    .slots {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .slot {
+        font-size: 12px;
+    }
+
+    .booking-card {
+        font-size: 13px;
     }
 }
