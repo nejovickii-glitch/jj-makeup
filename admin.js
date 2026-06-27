@@ -42,7 +42,7 @@ const footer = document.getElementById("footer");
 let selectedSlots = {};
 
 /* =========================
-   RENDER SLOTS (KLJUČ FIX)
+   RENDER (JEDINI IZVOR UI)
 ========================= */
 function renderSlots() {
 
@@ -126,11 +126,11 @@ if (sessionStorage.getItem("admin") === "true") {
 }
 
 /* =========================
-   SLOT CLICK
+   SLOT CLICK (PC + MOBILE FIX)
 ========================= */
 slots.forEach(slot => {
 
-    slot.addEventListener("click", () => {
+    const handle = () => {
 
         const time = slot.textContent.trim();
 
@@ -141,7 +141,14 @@ slots.forEach(slot => {
         }
 
         renderSlots();
-    });
+    };
+
+    slot.addEventListener("click", handle);
+
+    slot.addEventListener("touchend", (e) => {
+        e.preventDefault();
+        handle();
+    }, { passive: false });
 });
 
 /* =========================
@@ -257,7 +264,7 @@ async function loadBookings(date) {
             });
         });
 
-        /* LOCK TAKEN SLOTS */
+        /* LOCK TAKEN */
         slots.forEach(slot => {
 
             const time = slot.textContent.trim();
