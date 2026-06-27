@@ -157,6 +157,8 @@ header {
     text-align: center;
     cursor: pointer;
     padding: 0 40px;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 #adminDate::-webkit-calendar-picker-indicator {
@@ -313,12 +315,13 @@ header {
         box-shadow: 0 5px 12px rgba(0,0,0,0.18);
     }
 
-    @media (max-width: 480px) {
+@media (max-width: 480px) {
     #adminDate {
-        padding: 0 10px;
-        text-align: left; /* mobilni browseri često ignorišu text-align: center na date inputu */
+        padding: 0;
+        text-align: center;
+        -webkit-text-align: center;
     }
-    }
+}
 }
 .delete-btn {
     width: 120px;
