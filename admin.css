@@ -153,11 +153,13 @@ header {
     background: white;
     color: #5c4538;
     font-size: 14px;
-    text-align: center;
     font-family: 'Poppins', sans-serif;
-    cursor: pointer;
-    -webkit-appearance: none;
-    appearance: none;
+
+    text-align: center;
+    text-align-last: center;
+
+    padding-left: 280px;
+    padding-right: 40px;
 }
 
 #adminDate::-webkit-calendar-picker-indicator {
