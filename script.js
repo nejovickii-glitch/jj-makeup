@@ -14,19 +14,33 @@ const dateInput = document.getElementById("date");
 const timeSelect = document.getElementById("time");
 
 /* =========================
+   DATE DISPLAY
+========================= */
+function updateDateDisplay(date) {
+    const display = document.getElementById("dateDisplay");
+    if (!display) return;
+    if (!date) {
+        display.textContent = "Izaberi datum";
+    } else {
+        const [y, m, d] = date.split("-");
+        display.textContent = `${d}.${m}.${y}`;
+    }
+}
+
+/* =========================
    UČITAVANJE TERMINA
 ========================= */
 
 dateInput.addEventListener("change", async () => {
     const date = dateInput.value;
+
+    updateDateDisplay(date);
+
     if (!date) return;
 
     timeSelect.innerHTML = `<option>Učitavanje...</option>`;
 
     try {
-        const now = new Date();
-        const today = now.toISOString().split("T")[0];
-
         const slotDoc = await db.collection("slots").doc(date).get();
         const slots = slotDoc.exists ? slotDoc.data() : {};
 
@@ -40,20 +54,7 @@ dateInput.addEventListener("change", async () => {
         });
 
         const available = Object.keys(slots)
-            .filter(time => {
-                if (slots[time] !== true) return false;
-                if (taken.includes(time)) return false;
-
-                // sakrij prosle termine ako je danas
-                if (date === today) {
-                    const [hours, minutes] = time.split(":").map(Number);
-                    const slotTime = new Date();
-                    slotTime.setHours(hours, minutes, 0, 0);
-                    if (slotTime < now) return false;
-                }
-
-                return true;
-            })
+            .filter(time => slots[time] === true && !taken.includes(time))
             .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 
         timeSelect.innerHTML = `<option value="">Izaberi vreme</option>`;
@@ -98,7 +99,6 @@ document.getElementById("bookingForm").addEventListener("submit", async (e) => {
     }
 
     try {
-
         await db.collection("bookings").add({
             datum: date,
             vreme: time,
@@ -117,11 +117,10 @@ document.getElementById("bookingForm").addEventListener("submit", async (e) => {
             usluga: service
         });
 
-
-        // ✅ NOVO - SUCCESS CARD
         showSuccessCard("✔ Uspešno ste zakazali termin!");
 
         document.getElementById("bookingForm").reset();
+        updateDateDisplay("");
         timeSelect.innerHTML = `<option value="">Izaberite datum</option>`;
 
     } catch (err) {
@@ -135,7 +134,6 @@ document.getElementById("bookingForm").addEventListener("submit", async (e) => {
 ========================= */
 
 function showToast(message, type = "success") {
-
     const toast = document.getElementById("toast");
     if (!toast) return;
 
@@ -152,13 +150,11 @@ function showToast(message, type = "success") {
 }
 
 /* =========================
-   SUCCESS CARD (NOVO)
+   SUCCESS CARD
 ========================= */
 
 function showSuccessCard(message) {
-
     const card = document.getElementById("successCard");
-
     if (!card) return;
 
     card.textContent = message;
