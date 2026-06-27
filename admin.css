@@ -154,12 +154,9 @@ header {
     color: #5c4538;
     font-size: 14px;
     font-family: 'Poppins', sans-serif;
-
     text-align: center;
-    text-align-last: center;
-
-    padding-left: 280px;
-    padding-right: 40px;
+    cursor: pointer;
+    padding: 0 40px;
 }
 
 #adminDate::-webkit-calendar-picker-indicator {
@@ -314,6 +311,13 @@ header {
         color: white !important;
         border: 1px solid #c89f82 !important;
         box-shadow: 0 5px 12px rgba(0,0,0,0.18);
+    }
+
+    @media (max-width: 480px) {
+    #adminDate {
+        padding: 0 10px;
+        text-align: left; /* mobilni browseri često ignorišu text-align: center na date inputu */
+    }
     }
 }
 .delete-btn {
