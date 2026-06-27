@@ -340,42 +340,4 @@ window.addEventListener("load", async () => {
 
     renderSlots();
     loadBookings(savedDate);
-});</div>
-<label>Vreme:</label>
-<div class="slots">
-<button type="button" class="slot">06:00</button>
-<button type="button" class="slot">07:00</button>
-<button type="button" class="slot">08:00</button>
-<button type="button" class="slot">09:00</button>
-<button type="button" class="slot">10:00</button>
-<button type="button" class="slot">11:00</button>
-<button type="button" class="slot">12:00</button>
-<button type="button" class="slot">13:00</button>
-<button type="button" class="slot">14:00</button>
-<button type="button" class="slot">15:00</button>
-<button type="button" class="slot">16:00</button>
-<button type="button" class="slot">17:00</button>
-<button type="button" class="slot">18:00</button>
-<button type="button" class="slot">19:00</button>
-<button type="button" class="slot">20:00</button>
-<button type="button" class="slot">21:00</button>
-</div>
-<button id="saveBtn">Pusti termine</button>
-<h2>Zakazani termini</h2>
-<div id="bookingsList"></div>
-</section>
-</div>
-<!-- SUCCESS CARD -->
-<div id="successCard" class="success-card"></div>
-<!-- FOOTER -->
-<footer class="footer" id="footer">
-<p>© <span id="year"></span> JJ Admin | Sva prava zadržana</p>
-</footer>
-<script>
-document.getElementById("year").textContent = new Date().getFullYear();
-</script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<script src="admin.js"></script>
-</body>
-</html>
+});
