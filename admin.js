@@ -11,7 +11,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 /* =========================
-   LOGIN PODACI
+   LOGIN
 ========================= */
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "123456";
@@ -40,6 +40,23 @@ const footer = document.getElementById("footer");
    STATE
 ========================= */
 let selectedSlots = {};
+
+/* =========================
+   RENDER SLOTS (KLJUČ FIX)
+========================= */
+function renderSlots() {
+
+    slots.forEach(slot => {
+
+        const time = slot.textContent.trim();
+
+        if (selectedSlots[time]) {
+            slot.classList.add("active");
+        } else {
+            slot.classList.remove("active");
+        }
+    });
+}
 
 /* =========================
    SUCCESS POPUP
@@ -109,7 +126,7 @@ if (sessionStorage.getItem("admin") === "true") {
 }
 
 /* =========================
-   SLOT SELEKCIJA
+   SLOT CLICK
 ========================= */
 slots.forEach(slot => {
 
@@ -117,26 +134,26 @@ slots.forEach(slot => {
 
         const time = slot.textContent.trim();
 
-        const isActive = slot.classList.toggle("active");
+        if (selectedSlots[time]) {
+            delete selectedSlots[time];
+        } else {
+            selectedSlots[time] = true;
+        }
 
-        selectedSlots[time] = isActive;
+        renderSlots();
     });
-
 });
 
 /* =========================
-   RESET SLOTOVA
+   RESET
 ========================= */
 function resetSlots() {
     selectedSlots = {};
-
-    slots.forEach(slot => {
-        slot.classList.remove("active");
-    });
+    renderSlots();
 }
 
 /* =========================
-   SAVE TERMINA
+   SAVE
 ========================= */
 saveBtn.addEventListener("click", async () => {
 
@@ -155,6 +172,12 @@ saveBtn.addEventListener("click", async () => {
 
         showSuccess("✔ Termini uspešno sačuvani");
 
+        const doc = await db.collection("slots").doc(date).get();
+
+        selectedSlots = doc.exists ? (doc.data() || {}) : {};
+
+        renderSlots();
+
         loadBookings(date);
 
     } catch (err) {
@@ -164,9 +187,10 @@ saveBtn.addEventListener("click", async () => {
 });
 
 /* =========================
-   DELETE TERMIN
+   DELETE BOOKING
 ========================= */
 async function deleteBooking(id) {
+
     try {
         await db.collection("bookings").doc(id).delete();
 
@@ -200,11 +224,14 @@ async function loadBookings(date) {
         }
 
         let html = "";
+        const takenTimes = new Set();
 
         snap.forEach(doc => {
 
             const b = doc.data();
             const id = doc.id;
+
+            takenTimes.add(b.vreme);
 
             html += `
                 <div class="booking-card">
@@ -226,9 +253,25 @@ async function loadBookings(date) {
 
         document.querySelectorAll(".delete-btn").forEach(btn => {
             btn.addEventListener("click", () => {
-                const id = btn.getAttribute("data-id");
-                deleteBooking(id);
+                deleteBooking(btn.getAttribute("data-id"));
             });
+        });
+
+        /* LOCK TAKEN SLOTS */
+        slots.forEach(slot => {
+
+            const time = slot.textContent.trim();
+
+            if (takenTimes.has(time)) {
+                slot.classList.add("taken");
+                slot.classList.remove("active");
+                slot.style.pointerEvents = "none";
+                slot.style.opacity = "0.5";
+            } else {
+                slot.classList.remove("taken");
+                slot.style.pointerEvents = "auto";
+                slot.style.opacity = "1";
+            }
         });
 
     } catch (err) {
@@ -241,30 +284,38 @@ async function loadBookings(date) {
 /* =========================
    DATE CHANGE
 ========================= */
-adminDate.addEventListener("change", () => {
+adminDate.addEventListener("change", async () => {
 
     const date = adminDate.value;
-
     if (!date) return;
 
     resetSlots();
+
+    const doc = await db.collection("slots").doc(date).get();
+
+    selectedSlots = doc.exists ? (doc.data() || {}) : {};
+
+    renderSlots();
     loadBookings(date);
 });
 
 /* =========================
    INIT
 ========================= */
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
 
-    setTimeout(() => {
-        window.scrollTo(0, 0);
-    }, 10);
+    setTimeout(() => window.scrollTo(0, 0), 10);
 
     const savedDate = localStorage.getItem("lastSavedDate");
 
-    if (savedDate) {
-        adminDate.value = savedDate;
-        loadBookings(savedDate);
-    }
+    if (!savedDate) return;
 
+    adminDate.value = savedDate;
+
+    const doc = await db.collection("slots").doc(savedDate).get();
+
+    selectedSlots = doc.exists ? (doc.data() || {}) : {};
+
+    renderSlots();
+    loadBookings(savedDate);
 });
