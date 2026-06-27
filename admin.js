@@ -38,13 +38,11 @@ const bookingsList = document.getElementById("bookingsList");
    STATE
 ========================= */
 let selectedSlots = {};
-let currentDate = "";
 
 /* =========================
    SUCCESS POPUP
 ========================= */
 function showSuccess(message, isError = false) {
-
     const card = document.getElementById("successCard");
     if (!card) return;
 
@@ -60,9 +58,9 @@ function showSuccess(message, isError = false) {
 }
 
 /* =========================
-   LOGIN (CLICK + MOBILE FIX)
+   LOGIN
 ========================= */
-function handleLogin() {
+loginBtn.addEventListener("click", () => {
 
     const user = usernameInput.value.trim();
     const pass = passwordInput.value.trim();
@@ -79,10 +77,7 @@ function handleLogin() {
     } else {
         showSuccess("❌ Pogrešno korisničko ime ili lozinka", true);
     }
-}
-
-loginBtn.addEventListener("click", handleLogin);
-loginBtn.addEventListener("touchend", handleLogin); // 🔥 MOBILE FIX
+});
 
 /* =========================
    LOGOUT
@@ -107,21 +102,22 @@ if (sessionStorage.getItem("admin") === "true") {
 }
 
 /* =========================
-   SLOT SELEKCIJA
+   SLOT SELEKCIJA (VRACENA TVOJA LOGIKA + FIX MOBILE)
 ========================= */
 slots.forEach(slot => {
 
-    const toggle = () => {
+    slot.addEventListener("click", () => {
 
         const time = slot.textContent.trim();
 
-        slot.classList.toggle("active");
+        const isActive = slot.classList.toggle("active");
 
-        selectedSlots[time] = slot.classList.contains("active");
-    };
+        selectedSlots[time] = isActive;
 
-    slot.addEventListener("click", toggle);
-    slot.addEventListener("touchend", toggle); // 🔥 MOBILE FIX
+        /* mali mobile feedback (bez border efekta) */
+        slot.classList.add("tap");
+        setTimeout(() => slot.classList.remove("tap"), 100);
+    });
 });
 
 /* =========================
@@ -151,11 +147,9 @@ saveBtn.addEventListener("click", async () => {
 
         await db.collection("slots").doc(date).set(selectedSlots);
 
-        showSuccess("✔ Termini uspešno sačuvani");
-
         localStorage.setItem("lastSavedDate", date);
 
-        currentDate = date;
+        showSuccess("✔ Termini uspešno sačuvani");
 
         loadBookings(date);
 
@@ -166,38 +160,22 @@ saveBtn.addEventListener("click", async () => {
 });
 
 /* =========================
-   DELETE BOOKING 🔥 NOVO
+   DELETE TERMIN (NOVA FUNKCIJA)
 ========================= */
 async function deleteBooking(id) {
-
     try {
         await db.collection("bookings").doc(id).delete();
 
-        showSuccess("🗑 Termin obrisan");
+        showSuccess("✔ Termin obrisan");
 
-        if (currentDate) {
-            loadBookings(currentDate);
-        }
+        const date = adminDate.value || localStorage.getItem("lastSavedDate");
+        if (date) loadBookings(date);
 
     } catch (err) {
         console.log(err);
         showSuccess("❌ Greška pri brisanju", true);
     }
 }
-
-/* =========================
-   DATE CHANGE
-========================= */
-adminDate.addEventListener("change", () => {
-
-    const date = adminDate.value;
-    if (!date) return;
-
-    currentDate = date;
-
-    resetSlots();
-    loadBookings(date);
-});
 
 /* =========================
    LOAD BOOKINGS
@@ -222,6 +200,7 @@ async function loadBookings(date) {
         snap.forEach(doc => {
 
             const b = doc.data();
+            const id = doc.id;
 
             html += `
                 <div class="booking-card">
@@ -232,16 +211,7 @@ async function loadBookings(date) {
                     <p><b>Datum:</b> ${b.datum}</p>
                     <p><b>Vreme:</b> ${b.vreme}</p>
 
-                    <button onclick="deleteBooking('${doc.id}')"
-                        style="
-                            margin-top:10px;
-                            background:#5c4538;
-                            color:white;
-                            border:none;
-                            padding:8px 12px;
-                            border-radius:10px;
-                            cursor:pointer;
-                        ">
+                    <button class="delete-btn" data-id="${id}">
                         Obriši termin
                     </button>
                 </div>
@@ -249,6 +219,13 @@ async function loadBookings(date) {
         });
 
         bookingsList.innerHTML = html;
+
+        document.querySelectorAll(".delete-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const id = btn.getAttribute("data-id");
+                deleteBooking(id);
+            });
+        });
 
     } catch (err) {
         console.log(err);
@@ -258,19 +235,65 @@ async function loadBookings(date) {
 }
 
 /* =========================
-   INIT
+   DATE CHANGE (VRACENO FULL)
 ========================= */
-window.addEventListener("load", () => {
+adminDate.addEventListener("change", async () => {
 
-    setTimeout(() => {
-        window.scrollTo(0, 0);
-    }, 10);
+    const date = adminDate.value;
+    if (!date) return;
+
+    resetSlots();
+
+    try {
+        const doc = await db.collection("slots").doc(date).get();
+
+        selectedSlots = doc.exists ? (doc.data() || {}) : {};
+
+        slots.forEach(slot => {
+            const time = slot.textContent.trim();
+
+            if (selectedSlots[time]) {
+                slot.classList.add("active");
+            }
+        });
+
+        loadBookings(date);
+
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+/* =========================
+   INIT (RESTORE LAST DATE)
+========================= */
+window.addEventListener("load", async () => {
+
+    setTimeout(() => window.scrollTo(0, 0), 10);
 
     const savedDate = localStorage.getItem("lastSavedDate");
 
-    if (savedDate) {
-        adminDate.value = savedDate;
-        currentDate = savedDate;
+    if (!savedDate) return;
+
+    adminDate.value = savedDate;
+
+    try {
+
+        const doc = await db.collection("slots").doc(savedDate).get();
+
+        selectedSlots = doc.exists ? (doc.data() || {}) : {};
+
+        slots.forEach(slot => {
+            const time = slot.textContent.trim();
+
+            if (selectedSlots[time]) {
+                slot.classList.add("active");
+            }
+        });
+
         loadBookings(savedDate);
+
+    } catch (err) {
+        console.log(err);
     }
 });
