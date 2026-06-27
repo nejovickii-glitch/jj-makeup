@@ -225,10 +225,16 @@ async function loadBookings(date) {
             .where("datum", "==", date)
             .get();
 
-        if (snap.empty) {
-            bookingsList.innerHTML = "<p>Nema zakazanih termina</p>";
-            return;
-        }
+    if (snap.empty) {
+    bookingsList.innerHTML = "<p>Nema zakazanih termina</p>";
+    // resetuj sve slotove
+    slots.forEach(slot => {
+        slot.classList.remove("taken");
+        slot.style.pointerEvents = "auto";
+        slot.style.opacity = "1";
+    });
+    return;
+}
 
         let html = "";
         const takenTimes = new Set();
