@@ -1,111 +1,75 @@
 <!DOCTYPE html>
 <html lang="sr">
-
 <head>
-
 <meta charset="UTF-8">
-
 <!-- FIX: sprečava iOS zoom -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
 <title>JJ Admin</title>
-
 <link rel="stylesheet" href="admin.css">
-
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
 </head>
-
 <body>
-
 <!-- LOGIN -->
 <div id="loginPage">
-
-    <div class="login-box">
-
-        <h1>JJ</h1>
-
-        <h2>Admin Login</h2>
-
-        <input type="text" id="username" placeholder="Korisničko ime">
-
-        <input type="password" id="password" placeholder="Lozinka">
-
-        <button id="loginBtn">Prijavi se</button>
-
-    </div>
-
+<div class="login-box">
+<h1>JJ</h1>
+<h2>Admin Login</h2>
+<input type="text" id="username" placeholder="Korisničko ime">
+<input type="password" id="password" placeholder="Lozinka">
+<button id="loginBtn">Prijavi se</button>
 </div>
-
+</div>
 <!-- ADMIN -->
 <div id="adminPage" style="display:none;">
-
 <header>
-
-    <div class="logo">
-        <h1>JJ</h1>
-        <p>Beauty Studio</p>
-    </div>
-
-</header>
-
-<section class="admin-panel">
-
-    <button id="logoutBtn">Logout</button>
-
-    <h2>Admin Panel</h2>
-
- <label for="adminDate">Datum:</label>
- <input type="date" id="adminDate">
-
-    <label>Vreme:</label>
-    <div class="slots">
-
-        <button class="slot">06:00</button>
-        <button class="slot">07:00</button>
-        <button class="slot">08:00</button>
-        <button class="slot">09:00</button>
-        <button class="slot">10:00</button>
-        <button class="slot">11:00</button>
-        <button class="slot">12:00</button>
-        <button class="slot">13:00</button>
-        <button class="slot">14:00</button>
-        <button class="slot">15:00</button>
-        <button class="slot">16:00</button>
-        <button class="slot">17:00</button>
-        <button class="slot">18:00</button>
-        <button class="slot">19:00</button>
-        <button class="slot">20:00</button>
-        <button class="slot">21:00</button>
-
-    </div>
-
-    <button id="saveBtn">Pusti termine</button>
-
-    <h2>Zakazani termini</h2>
-
-    <div id="bookingsList"></div>
-
-</section>
-
+<div class="logo">
+<h1>JJ</h1>
+<p>Beauty Studio</p>
 </div>
-
+</header>
+<section class="admin-panel">
+<button id="logoutBtn">Logout</button>
+<h2>Admin Panel</h2>
+<label for="adminDate">Datum:</label>
+<div class="date-wrapper">
+    <input type="date" id="adminDate">
+    <span id="dateDisplay">Izaberi datum</span>
+</div>
+<label>Vreme:</label>
+<div class="slots">
+<button type="button" class="slot">06:00</button>
+<button type="button" class="slot">07:00</button>
+<button type="button" class="slot">08:00</button>
+<button type="button" class="slot">09:00</button>
+<button type="button" class="slot">10:00</button>
+<button type="button" class="slot">11:00</button>
+<button type="button" class="slot">12:00</button>
+<button type="button" class="slot">13:00</button>
+<button type="button" class="slot">14:00</button>
+<button type="button" class="slot">15:00</button>
+<button type="button" class="slot">16:00</button>
+<button type="button" class="slot">17:00</button>
+<button type="button" class="slot">18:00</button>
+<button type="button" class="slot">19:00</button>
+<button type="button" class="slot">20:00</button>
+<button type="button" class="slot">21:00</button>
+</div>
+<button id="saveBtn">Pusti termine</button>
+<h2>Zakazani termini</h2>
+<div id="bookingsList"></div>
+</section>
+</div>
 <!-- SUCCESS CARD -->
 <div id="successCard" class="success-card"></div>
-
 <!-- FOOTER -->
 <footer class="footer" id="footer">
-    <p>© <span id="year"></span> JJ Admin | Sva prava zadržana</p>
+<p>© <span id="year"></span> JJ Admin | Sva prava zadržana</p>
 </footer>
-
 <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+document.getElementById("year").textContent = new Date().getFullYear();
 </script>
-
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
 <script src="admin.js"></script>
-
 </body>
 </html>
