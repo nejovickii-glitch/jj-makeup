@@ -106,18 +106,17 @@ if (sessionStorage.getItem("admin") === "true") {
 ========================= */
 slots.forEach(slot => {
 
-    slot.addEventListener("click", () => {
+    const toggleSlot = () => {
 
         const time = slot.textContent.trim();
-
         const isActive = slot.classList.toggle("active");
 
         selectedSlots[time] = isActive;
+    };
 
-        /* mali mobile feedback (bez border efekta) */
-        slot.classList.add("tap");
-        setTimeout(() => slot.classList.remove("tap"), 100);
-    });
+    slot.addEventListener("click", toggleSlot);
+    slot.addEventListener("touchstart", toggleSlot, { passive: true });
+
 });
 
 /* =========================
