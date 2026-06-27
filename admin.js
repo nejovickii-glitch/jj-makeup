@@ -114,14 +114,9 @@ slots.forEach(slot => {
         selectedSlots[time] = isActive;
     };
 
-    if ("ontouchstart" in window) {
-    slot.addEventListener("touchstart", (e) => {
-        e.preventDefault();
-        toggleSlot();
-    }, { passive: false });
-} else {
     slot.addEventListener("click", toggleSlot);
-}
+    slot.addEventListener("touchstart", toggleSlot, { passive: true });
+
 });
 
 /* =========================
