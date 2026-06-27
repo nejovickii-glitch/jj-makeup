@@ -18,14 +18,14 @@ const timeSelect = document.getElementById("time");
 ========================= */
 
 dateInput.addEventListener("change", async () => {
-
     const date = dateInput.value;
-
     if (!date) return;
 
     timeSelect.innerHTML = `<option>Učitavanje...</option>`;
 
     try {
+        const now = new Date();
+        const today = now.toISOString().split("T")[0];
 
         const slotDoc = await db.collection("slots").doc(date).get();
         const slots = slotDoc.exists ? slotDoc.data() : {};
@@ -35,13 +35,25 @@ dateInput.addEventListener("change", async () => {
             .get();
 
         const taken = [];
-
         bookingsSnap.forEach(doc => {
             taken.push(doc.data().vreme);
         });
 
         const available = Object.keys(slots)
-            .filter(time => slots[time] === true && !taken.includes(time))
+            .filter(time => {
+                if (slots[time] !== true) return false;
+                if (taken.includes(time)) return false;
+
+                // sakrij prosle termine ako je danas
+                if (date === today) {
+                    const [hours, minutes] = time.split(":").map(Number);
+                    const slotTime = new Date();
+                    slotTime.setHours(hours, minutes, 0, 0);
+                    if (slotTime < now) return false;
+                }
+
+                return true;
+            })
             .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 
         timeSelect.innerHTML = `<option value="">Izaberi vreme</option>`;
@@ -52,11 +64,9 @@ dateInput.addEventListener("change", async () => {
         }
 
         available.forEach(time => {
-
             const opt = document.createElement("option");
             opt.value = time;
             opt.textContent = time;
-
             timeSelect.appendChild(opt);
         });
 
