@@ -139,10 +139,12 @@ select {
    DATE FIX
 ========================= */
 input[type="date"] {
+    padding: 0;
     text-align: center;
     -webkit-appearance: none;
     appearance: none;
     padding-right: 0;
+    line-height: normal;
 }
 
 input[type="date"]::-webkit-datetime-edit {
