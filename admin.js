@@ -88,28 +88,6 @@ function showSuccess(message, isError = false) {
 }
 
 /* =========================
-   UKLONI PROSLE TERMINE
-========================= */
-function hidePastSlots(date) {
-    const now = new Date();
-    const today = now.toISOString().split("T")[0];
-
-    slots.forEach(slot => {
-        const time = slot.textContent.trim();
-        const [hours, minutes] = time.split(":").map(Number);
-
-        const slotDate = new Date(date);
-        slotDate.setHours(hours, minutes, 0, 0);
-
-        if (date === today && slotDate < now) {
-            slot.style.display = "none";
-        } else {
-            slot.style.display = "";
-        }
-    });
-}
-
-/* =========================
    LOGIN
 ========================= */
 loginBtn.addEventListener("click", () => {
@@ -335,7 +313,6 @@ adminDate.addEventListener("change", async () => {
     }
 
     resetSlots();
-    hidePastSlots(date);
 
     const doc = await db.collection("slots").doc(date).get();
 
@@ -356,7 +333,6 @@ window.addEventListener("load", async () => {
 
     adminDate.value = savedDate;
     updateDateDisplay(savedDate);
-    hidePastSlots(savedDate);
 
     const doc = await db.collection("slots").doc(savedDate).get();
 
