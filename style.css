@@ -1,0 +1,296 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600&display=swap');
+
+/* =========================
+   RESET
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(180deg, #f8eee5, #fffaf6);
+    color: #5c4538;
+    line-height: 1.5;
+}
+
+/* =========================
+   HEADER
+========================= */
+header {
+    text-align: center;
+    padding: 60px 20px 45px;
+    background: #fff8f1;
+    border-bottom: 1px solid rgba(184,139,106,0.2);
+}
+
+.logo h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 80px;
+    color: #b88b6a;
+}
+
+.logo::after {
+    content: "BEAUTY STUDIO";
+    display: block;
+    font-size: 11px;
+    letter-spacing: 6px;
+    margin-top: 15px;
+    color: #8f6b52;
+}
+
+/* =========================
+   HERO
+========================= */
+.hero {
+    text-align: center;
+    padding: 70px 20px 50px;
+}
+
+.hero h2 {
+    font-size: 38px;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    color: #7b5f4f;
+    font-size: 16px;
+    margin-bottom: 25px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+button,
+.hero a {
+    background: #c89f82;
+    color: #fff;
+    padding: 14px 35px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.25s ease;
+    display: inline-block;
+}
+
+button:hover,
+.hero a:hover {
+    transform: translateY(-2px);
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.secondary-btn {
+    background: #fff;
+    color: #c89f82;
+    border: 2px solid #c89f82;
+}
+
+.secondary-btn:hover {
+    background: #c89f82;
+    color: #fff;
+}
+
+/* =========================
+   BOOKING BOX
+========================= */
+#zakazivanje {
+    max-width: 520px;
+    margin: 0 auto 60px;
+    padding: 30px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(150,100,70,0.08);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+input,
+select {
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+}
+
+input:focus,
+select:focus {
+    border-color: #c89f82;
+}
+
+/* =========================
+   DATE WRAPPER
+========================= */
+.date-wrapper {
+    position: relative;
+    height: 44px;
+}
+
+.date-wrapper input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+#dateDisplay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #fff;
+}
+
+/* =========================
+   FOOTER
+========================= */
+.footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 13px;
+    color: #8f6b52;
+    background: #fff8f1;
+    border-top: 1px solid rgba(184,139,106,0.2);
+}
+
+/* =========================
+   TOAST
+========================= */
+#toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(200,159,130,0.95);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 50px;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.25s;
+    z-index: 9999;
+}
+
+#toast.show {
+    opacity: 1;
+}
+
+/* =========================
+   SUCCESS CARD
+========================= */
+.success-card {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    padding: 16px 22px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    opacity: 0;
+    transition: 0.3s;
+    z-index: 9999;
+}
+
+.success-card.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
+}
+
+/* =========================
+   CENOVNIK
+========================= */
+.pricing {
+    max-width: 700px;
+    margin: 10px auto 70px;
+    padding: 0 20px;
+}
+
+.price-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 8px 20px rgba(150,100,70,0.08);
+    transition: 0.2s;
+}
+
+.price-card:hover {
+    transform: translateY(-3px);
+}
+
+.price-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.price-top h3 {
+    font-size: 17px;
+}
+
+.price-top span {
+    color: #c89f82;
+    font-weight: 700;
+}
+
+.price-card p {
+    color: #8f6b52;
+    font-size: 14px;
+}
+
+.booking-link {
+    display: block;
+    margin: 35px auto 0;
+    text-align: center;
+    background: #c89f82;
+    color: #fff;
+    padding: 14px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 600px) {
+    .hero h2 {
+        font-size: 24px;
+    }
+
+    #zakazivanje {
+        width: 92%;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+    }
+
+    button,
+    .hero a {
+        width: 100%;
+        text-align: center;
+    }
+}
