@@ -9,11 +9,13 @@
     box-sizing: border-box;
 }
 
+/* =========================
+   BODY
+========================= */
 body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(180deg, #f8eee5, #fffaf6);
     color: #5c4538;
-    line-height: 1.5;
 }
 
 /* =========================
@@ -28,16 +30,18 @@ header {
 
 .logo h1 {
     font-family: 'Great Vibes', cursive;
-    font-size: 80px;
+    font-size: 90px;
     color: #b88b6a;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
 }
 
 .logo::after {
     content: "BEAUTY STUDIO";
     display: block;
     font-size: 11px;
-    letter-spacing: 6px;
-    margin-top: 15px;
+    letter-spacing: 7px;
+    margin-top: 22px;
     color: #8f6b52;
 }
 
@@ -46,18 +50,18 @@ header {
 ========================= */
 .hero {
     text-align: center;
-    padding: 70px 20px 50px;
+    padding: 70px 20px;
 }
 
 .hero h2 {
-    font-size: 38px;
+    font-size: 40px;
     margin-bottom: 12px;
 }
 
 .hero p {
+    margin-bottom: 30px;
     color: #7b5f4f;
     font-size: 16px;
-    margin-bottom: 25px;
 }
 
 /* =========================
@@ -66,13 +70,13 @@ header {
 button,
 .hero a {
     background: #c89f82;
-    color: #fff;
-    padding: 14px 35px;
+    color: white;
+    padding: 15px 40px;
     border-radius: 50px;
     border: none;
     cursor: pointer;
     text-decoration: none;
-    transition: 0.25s ease;
+    transition: 0.3s;
     display: inline-block;
 }
 
@@ -81,86 +85,130 @@ button:hover,
     transform: translateY(-2px);
 }
 
-.hero-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.secondary-btn {
-    background: #fff;
-    color: #c89f82;
-    border: 2px solid #c89f82;
-}
-
-.secondary-btn:hover {
-    background: #c89f82;
-    color: #fff;
+/* =========================
+   BOOKING SECTION
+========================= */
+#zakazivanje {
+    max-width: 500px;
+    margin: 0px auto 50px;
+    padding: 30px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(150,100,70,0.08);
 }
 
 /* =========================
-   BOOKING BOX
+   FORM
 ========================= */
-#zakazivanje {
-    max-width: 520px;
-    margin: 0 auto 60px;
-    padding: 30px;
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 10px 25px rgba(150,100,70,0.08);
-}
-
 form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-}
-
-label {
-    font-size: 14px;
-    font-weight: 500;
-}
-
-input,
-select {
-    height: 44px;
-    padding: 0 12px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    font-size: 15px;
-    outline: none;
-}
-
-input:focus,
-select:focus {
-    border-color: #c89f82;
+    gap: 10px;
 }
 
 /* =========================
-   DATE WRAPPER
+   LABEL
 ========================= */
-.date-wrapper {
-    position: relative;
+label {
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+    margin-bottom: 2px;
+}
+
+/* =========================
+   INPUT + SELECT
+========================= */
+input,
+select {
+    width: 100%;
     height: 44px;
-}
+    padding: 0 12px;
+    font-size: 16px;
+    font-family: inherit;
 
-.date-wrapper input {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    cursor: pointer;
-}
-
-#dateDisplay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     border: 1px solid #ddd;
     border-radius: 10px;
-    background: #fff;
+
+    display: block;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* =========================
+   DATE FIX
+========================= */
+input[type="date"] {
+    padding: 0 12px;
+    text-align: center;
+    -webkit-appearance: none;
+    appearance: none;
+    line-height: 44px;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 10px;
+}
+
+/* =========================
+   FOCUS
+========================= */
+input:focus,
+select:focus {
+    border-color: #c89f82;
+    outline: none;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+
+    .logo h1 {
+        font-size: 60px;
+    }
+
+    .hero h2 {
+        font-size: 24px;
+    }
+
+    #zakazivanje {
+        width: 92%;
+        padding: 20px;
+    }
+
+    button,
+    .hero a {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .logo h1 {
+        font-size: 50px;
+    }
+
+    .hero h2 {
+        font-size: 20px;
+    }
+
+    .hero p {
+        font-size: 14px;
+    }
+
+    input,
+    select {
+        font-size: 16px;
+    }
 }
 
 /* =========================
@@ -169,32 +217,47 @@ select:focus {
 .footer {
     text-align: center;
     padding: 20px;
+    margin-top: 60px;
     font-size: 13px;
     color: #8f6b52;
-    background: #fff8f1;
     border-top: 1px solid rgba(184,139,106,0.2);
+    background: #fff8f1;
+
+    position: relative;
+    width: 100%;
+    clear: both;
 }
 
 /* =========================
-   TOAST
+   POPUP (ADDED ONLY)
 ========================= */
 #toast {
     position: fixed;
-    top: 20px;
     left: 50%;
-    transform: translateX(-50%);
+    top: 20px;
+    transform: translateX(-50%) translateY(-20px);
+
     background: rgba(200,159,130,0.95);
-    color: #fff;
-    padding: 12px 20px;
+    color: white;
+
+    padding: 14px 22px;
     border-radius: 50px;
+
+    font-size: 14px;
+    font-weight: 500;
+
     opacity: 0;
     pointer-events: none;
-    transition: 0.25s;
+
+    transition: 0.25s ease;
     z-index: 9999;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
 #toast.show {
     opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
 /* =========================
@@ -202,95 +265,164 @@ select:focus {
 ========================= */
 .success-card {
     position: fixed;
-    bottom: 25px;
+    bottom: 30px;
     left: 50%;
-    transform: translateX(-50%);
-    background: #fff;
-    padding: 16px 22px;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    transform: translateX(-50%) translateY(20px);
+
+    background: #ffffff;
+    color: #5c4538;
+
+    padding: 18px 25px;
+    border-radius: 20px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+
+    font-size: 15px;
+    font-weight: 500;
+
     opacity: 0;
-    transition: 0.3s;
+    pointer-events: none;
+
+    transition: 0.3s ease;
     z-index: 9999;
 }
 
 .success-card.show {
     opacity: 1;
-    transform: translateX(-50%) translateY(-5px);
+    transform: translateX(-50%) translateY(0);
+}
+/* =========================
+   DATE WRAPPER
+========================= */
+.date-wrapper {
+    position: relative;
+    width: 100%;
+    height: 44px;
+}
+
+.date-wrapper #date {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+    padding: 0;
+}
+
+#dateDisplay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: white;
+    color: #5c4538;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.date-wrapper:hover #dateDisplay {
+    border-color: #c89f82;
+}
+/* =========================
+   HERO BUTTONS
+========================= */
+
+.hero-buttons{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.secondary-btn{
+    background:white;
+    color:#c89f82;
+    border:2px solid #c89f82;
+}
+
+.secondary-btn:hover{
+    background:#c89f82;
+    color:white;
 }
 
 /* =========================
    CENOVNIK
 ========================= */
-.pricing {
-    max-width: 700px;
-    margin: 10px auto 70px;
-    padding: 0 20px;
+
+.pricing{
+    max-width:700px;
+    margin:5px auto 70px;
+    padding:0 20px;
 }
 
-.price-card {
-    background: #fff;
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 15px;
-    box-shadow: 0 8px 20px rgba(150,100,70,0.08);
-    transition: 0.2s;
+.price-card{
+    background:white;
+    border-radius:18px;
+    padding:22px;
+    margin-bottom:18px;
+    box-shadow:0 10px 30px rgba(150,100,70,.08);
+    transition:.25s;
 }
 
-.price-card:hover {
-    transform: translateY(-3px);
+.price-card:hover{
+    transform:translateY(-4px);
 }
 
-.price-top {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
+.price-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    margin-bottom:8px;
 }
 
-.price-top h3 {
-    font-size: 17px;
+.price-top h3{
+    font-size:18px;
+    font-weight:600;
 }
 
-.price-top span {
-    color: #c89f82;
-    font-weight: 700;
+.price-top span{
+    color:#c89f82;
+    font-weight:700;
+    font-size:18px;
 }
 
-.price-card p {
-    color: #8f6b52;
-    font-size: 14px;
+.price-card p{
+    color:#8f6b52;
 }
 
-.booking-link {
-    display: block;
-    margin: 35px auto 0;
-    text-align: center;
-    background: #c89f82;
-    color: #fff;
-    padding: 14px 35px;
-    border-radius: 50px;
-    text-decoration: none;
+.booking-link{
+    display:block;
+    width:max-content;
+    margin:40px auto 0;
+    background:#c89f82;
+    color:white;
+    text-decoration:none;
+    padding:15px 40px;
+    border-radius:50px;
+    transition:.25s;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 600px) {
-    .hero h2 {
-        font-size: 24px;
+.booking-link:hover{
+    transform:translateY(-2px);
+}
+
+@media(max-width:600px){
+
+    .price-top{
+        flex-direction:column;
+        align-items:flex-start;
     }
 
-    #zakazivanje {
-        width: 92%;
-    }
-
-    .hero-buttons {
-        flex-direction: column;
-    }
-
-    button,
-    .hero a {
-        width: 100%;
-        text-align: center;
+    .booking-link{
+        width:100%;
+        text-align:center;
     }
 }
