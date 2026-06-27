@@ -34,6 +34,8 @@ const saveBtn = document.getElementById("saveBtn");
 const slots = document.querySelectorAll(".slot");
 const bookingsList = document.getElementById("bookingsList");
 
+const footer = document.getElementById("footer");
+
 /* =========================
    STATE
 ========================= */
@@ -71,6 +73,7 @@ loginBtn.addEventListener("click", () => {
 
         loginPage.style.display = "none";
         adminPage.style.display = "block";
+        footer.style.display = "block";
 
         showSuccess("✔ Uspešno ste se ulogovali");
 
@@ -89,6 +92,7 @@ logoutBtn.addEventListener("click", () => {
 
     loginPage.style.display = "block";
     adminPage.style.display = "none";
+    footer.style.display = "none";
 
     showSuccess("👋 Uspešno ste se izlogovali");
 });
@@ -99,23 +103,24 @@ logoutBtn.addEventListener("click", () => {
 if (sessionStorage.getItem("admin") === "true") {
     loginPage.style.display = "none";
     adminPage.style.display = "block";
+    footer.style.display = "block";
+} else {
+    footer.style.display = "none";
 }
 
 /* =========================
-   SLOT SELEKCIJA (VRACENA TVOJA LOGIKA + FIX MOBILE)
+   SLOT SELEKCIJA
 ========================= */
 slots.forEach(slot => {
 
-    const toggleSlot = () => {
+    slot.addEventListener("click", () => {
 
         const time = slot.textContent.trim();
+
         const isActive = slot.classList.toggle("active");
 
         selectedSlots[time] = isActive;
-    };
-
-    slot.addEventListener("click", toggleSlot);
-    slot.addEventListener("touchstart", toggleSlot, { passive: true });
+    });
 
 });
 
@@ -159,7 +164,7 @@ saveBtn.addEventListener("click", async () => {
 });
 
 /* =========================
-   DELETE TERMIN (NOVA FUNKCIJA)
+   DELETE TERMIN
 ========================= */
 async function deleteBooking(id) {
     try {
@@ -234,65 +239,32 @@ async function loadBookings(date) {
 }
 
 /* =========================
-   DATE CHANGE (VRACENO FULL)
+   DATE CHANGE
 ========================= */
-adminDate.addEventListener("change", async () => {
+adminDate.addEventListener("change", () => {
 
     const date = adminDate.value;
+
     if (!date) return;
 
     resetSlots();
-
-    try {
-        const doc = await db.collection("slots").doc(date).get();
-
-        selectedSlots = doc.exists ? (doc.data() || {}) : {};
-
-        slots.forEach(slot => {
-            const time = slot.textContent.trim();
-
-            if (selectedSlots[time]) {
-                slot.classList.add("active");
-            }
-        });
-
-        loadBookings(date);
-
-    } catch (err) {
-        console.log(err);
-    }
+    loadBookings(date);
 });
 
 /* =========================
-   INIT (RESTORE LAST DATE)
+   INIT
 ========================= */
-window.addEventListener("load", async () => {
+window.addEventListener("load", () => {
 
-    setTimeout(() => window.scrollTo(0, 0), 10);
+    setTimeout(() => {
+        window.scrollTo(0, 0);
+    }, 10);
 
     const savedDate = localStorage.getItem("lastSavedDate");
 
-    if (!savedDate) return;
-
-    adminDate.value = savedDate;
-
-    try {
-
-        const doc = await db.collection("slots").doc(savedDate).get();
-
-        selectedSlots = doc.exists ? (doc.data() || {}) : {};
-
-        slots.forEach(slot => {
-            const time = slot.textContent.trim();
-
-            if (selectedSlots[time]) {
-                slot.classList.add("active");
-            }
-        });
-
+    if (savedDate) {
+        adminDate.value = savedDate;
         loadBookings(savedDate);
-
-    } catch (err) {
-        console.log(err);
     }
+
 });
