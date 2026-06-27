@@ -124,7 +124,7 @@ select {
     width: 100%;
     height: 44px;
     padding: 12px;
-    font-size: 14px;
+    font-size: 16px;
     font-family: inherit;
 
     border: 1px solid #ddd;
@@ -203,7 +203,7 @@ select:focus {
 
     input,
     select {
-        font-size: 13px;
+        font-size: 16px;
     }
 }
 
